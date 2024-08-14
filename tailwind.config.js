@@ -5,6 +5,8 @@ export default {
     extend: {
       backgroundImage: {
         'custom-bg': "url('/src/assets/bg.png')",
+        'sidebar-bg': "url('/src/assets/bg-sidebar.svg')",
+        'header-bg': "url('/src/assets/bg-header.svg')",
       },
     },
   },

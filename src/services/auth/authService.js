@@ -3,6 +3,7 @@ import AxiosInstance from "../axiosInstance";
 
 const login = async (formData) => {
   try {
+    console.log("iniciando sesion");
     const response = await AxiosInstance.post('/login', formData);
     return response.data;
   } catch (error) {

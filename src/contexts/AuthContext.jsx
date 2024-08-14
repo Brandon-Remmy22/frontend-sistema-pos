@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const authLogin = async (credentials) => {
     try {
       const response = await login(credentials);
-      localStorage.setItem('userAuth', JSON.stringify(response))
+      localStorage.setItem('userAuth', JSON.stringify(response.user))
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
