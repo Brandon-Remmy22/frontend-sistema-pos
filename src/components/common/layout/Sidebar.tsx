@@ -10,6 +10,8 @@ import {
   RiDashboardLine,
   RiSettings3Line,
   RiArrowDropRightLine,
+  RiUser3Line,
+  RiCustomerService2Line,
 } from "react-icons/ri";
 
 
@@ -121,7 +123,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               >
                 <li>
                   <Link
-                    to="cashdesk"
+                    to="#"
                     className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
                   >
                     <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
@@ -135,7 +137,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 to="/usuarios"
                 className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
               >
-                <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
+                <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
               </Link>
             </li>
             <li className="group">
@@ -143,7 +145,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 to="/clientes"
                 className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
               >
-                <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Clientes
+                <RiCustomerService2Line className="text-primary text-xl group-hover:text-yellow-500" /> Clientes
               </Link>
             </li>
 

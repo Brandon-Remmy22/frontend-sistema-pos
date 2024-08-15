@@ -4,7 +4,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 
 import { AnimatePresence } from "framer-motion";
 import { AlertProvider } from "./contexts/AlertContext";
-
 import PublicRoute from "./components/common/routing/PublicRoute";
 import PrivateRoute from "./components/common/routing/PrivateRoute";
 import LayoutAdmin from "./layouts/LayoutAdmin";
@@ -13,6 +12,8 @@ import LayoutAdmin from "./layouts/LayoutAdmin";
 
 import Login from "./pages/auth/Login";
 import Home from "./pages/admin/Home";
+import ClientIndex from './pages/admin/client/Index';
+import UserIndex from './pages/admin/user/Index';
 
 function App() {
   const location = useLocation();
@@ -31,10 +32,12 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<LayoutAdmin />}>
                 <Route index element={<Home />} />
+                <Route path="/clientes" element={<ClientIndex />} />
+                <Route path="/usuarios" element={<UserIndex />} />
               </Route>
             </Route>
           </Routes>
-        </AnimatePresence>    
+        </AnimatePresence>
       </AlertProvider>
 
 

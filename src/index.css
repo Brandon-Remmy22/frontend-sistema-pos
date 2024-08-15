@@ -1,3 +1,81 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  .scroll-editado {
+    scrollbar-width: thin;
+    scrollbar-color:#d1d5db #d1d5db;
+  }
+  
+  /* Estilo para el scrollbar en WebKit (Chrome, Safari, Opera) */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Ancho del scrollbar */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Color del thumb (la barra que se mueve) */
+    border-radius: 4px; /* Borde redondeado del thumb */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent; /* Color del track (el área de desplazamiento) */
+  }
+  
+  /* Estilo para el scrollbar en Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin; /* Grosor del scrollbar */
+    scrollbar-color: transparent transparent; /* Color del thumb y del track */
+  }
+  
+  /* Estilos adicionales */
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #939393; /* Color del thumb al pasar el mouse por encima */
+  }
+  
+  .custom-scrollbar:hover::-webkit-scrollbar-track {
+    background-color: #f5f5f5; /* Color del track al pasar el mouse por encima */
+  }
+  
+  .custom-scrollbar:hover {
+    scrollbar-color: #dddddd #f5f5f5; /* Color del thumb y del track al pasar el mouse por encima */
+  }
+  
+  .table-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(99vh - 200px); 
+  }
+  
+  .table-header, .pagination-container {
+    background-color: white;
+    position: sticky;
+    z-index: 10;
+  }
+  
+  .table-header {
+    top: 0;
+  }
+  
+  .pagination-container {
+    bottom: 0;
+    border-top: 1px solid #e2e8f0;
+    width: 100%;
+  }
+  
+  .table-content {
+    flex-grow: 1;
+    overflow-y: auto;
+
+  }
+  
+  .pagination-container select,
+  .pagination-container button {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
