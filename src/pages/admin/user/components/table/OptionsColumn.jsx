@@ -32,11 +32,11 @@ const OptionsColumn = ({ user, updateUsers }) => {
     eliminar: async () => {
       try {
         await deleteUser(user.id);
-        showAlert('usere eliminado correctamente', 'success');
+        showAlert('usuario eliminado correctamente', 'success');
         updateUsers();
         setDialogDelete(false);
       } catch (error) {
-        showAlert('Error al eliminar la usere', 'error');
+        showAlert('Error al eliminar la usuario', 'error');
       }
     },
     editar: async (formData) => {
@@ -45,11 +45,11 @@ const OptionsColumn = ({ user, updateUsers }) => {
         const { nombre, id } = formData;
         await updateUser(formData, id);
         updateUsers();
-        showAlert('usere actualizada correctamente', 'success');
+        showAlert('usuario actualizada correctamente', 'success');
         setFormErrors({});
         setIsOpenModal(false);
       } catch (error) {
-        showAlert('Error al actualizar usere', 'error');
+        showAlert('Error al actualizar usuario', 'error');
       }
     },
   };
@@ -119,11 +119,11 @@ const OptionsColumn = ({ user, updateUsers }) => {
         user={user}
         isOpen={isOpenDialogEdit}
         setIsOpen={setDialogDelete}
-        title="Eliminar usere"
+        title="Eliminar usuario"
         description={
-          `¿Está seguro que desea eliminar el usere ${user.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
+          `¿Está seguro que desea eliminar el usuario ${user.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
         }
-        confirmButtonText={`Sí, eliminar usere`}
+        confirmButtonText={`Sí, eliminar usuario`}
         cancelButtonText="Cancelar"
         onConfirm={() => handleConfirm(user)}
         onCancel={handleCancel}
@@ -136,7 +136,7 @@ const OptionsColumn = ({ user, updateUsers }) => {
       <ModalForm
         isOpen={isOpenModal}
         setIsOpen={setIsOpenModal}
-        title="Editar usere"
+        title="Editar usuario"
         icon={<RiEdit2Line className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
       >
          <UserForm

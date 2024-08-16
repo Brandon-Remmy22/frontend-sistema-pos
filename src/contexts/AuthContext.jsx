@@ -18,8 +18,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('userAuth', JSON.stringify(response.user))
       setIsAuthenticated(true);
       navigate('/');
+      return response;
     } catch (error) {
-      throw error;
+      return error;
     } finally {
       setLoading(false);
     }

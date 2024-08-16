@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import { AlertContext } from "../../contexts/AlertContext";
 import {
@@ -10,15 +10,22 @@ import {
 } from "react-icons/ri";
 import { useAuth } from "../../hooks/useAuth";
 import AnimatedPage from "../../components/framer/AnimatedPage";
+import { changePassword } from "../../services/user/userService";
 
 
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
     password: "",
+    passwordConfirm: "",
   });
-  const { authLogin } = useAuth();
+  const location = useLocation();
+
+  // Obtener los parámetros de la URL
+  const queryParams = new URLSearchParams(location.search);
+
+  // Obtener el valor del token
+  const token = queryParams.get('token');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,11 +41,11 @@ const ChangePassword = () => {
     e.preventDefault();
 
     try {
-      authLogin(formData);
-
-      showAlert('Inicio de sesion correctamente', 'success');
+      await changePassword({ email: token, ...formData });
+      showAlert('Cambio correcto de contraseña', 'success');
+      navigate('/login');
     } catch (error) {
-      showAlert('Error al inciar sesion', 'error');
+      showAlert('Error al cambiar contraseña', 'error');
     }
 
     if (!formData.email || !formData.password) {
@@ -81,8 +88,8 @@ const ChangePassword = () => {
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
+                  name="passwordConfirm"
+                  value={formData.passwordConfirm}
                   onChange={handleChange}
                   className="py-3 px-8 bg-secondary-50 w-full outline-none rounded-lg"
                   placeholder="Repite tu contraseña"
@@ -112,12 +119,12 @@ const ChangePassword = () => {
               </div>
             </form>
             <div className="flex flex-col items-center gap-4">
-              <Link
+              {/* <Link
                 to="/forgot-password"
                 className="text-gray-600 hover:text-primary transition-colors"
               >
                 ¿Olvidaste tu contraseña?
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

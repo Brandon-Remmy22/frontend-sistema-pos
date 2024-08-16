@@ -7,13 +7,12 @@ const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: I
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
 
-  const inputClasses = `pl-16 block w-full rounded-lg border-2 py-2 px-3 text-gray-800 transition-colors duration-300 ${
-    error
+  const inputClasses = `pl-16 block w-full rounded-lg border-2 py-2 px-3 text-gray-800 transition-colors duration-300 ${error
       ? 'border-red-300 focus:border-red-300 focus:ring-red-300 focus:shadow-md focus:shadow-red-300/50'
       : isFocused
-      ? 'border-yellow-700 focus:border-yellow-700 focus:ring-yellow-700 focus:shadow-md focus:shadow-yellow-700/50'
-      : 'border-gray-300'
-  } outline-none`;
+        ? 'border-yellow-700 focus:border-yellow-700 focus:ring-yellow-700 focus:shadow-md focus:shadow-yellow-700/50'
+        : 'border-gray-300'
+    } outline-none`;
 
   const iconColor = error ? 'text-red-500' : isFocused ? 'text-blue-500' : 'text-gray-500';
   const borderColor = error ? 'border-red-300' : isFocused ? 'border-blue-300' : 'border-gray-300';

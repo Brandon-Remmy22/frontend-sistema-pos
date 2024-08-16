@@ -37,6 +37,16 @@ const createSell = async (newClient) => {
     }
 };
 
+const changePassword = async (user) => {
+    try {
+        const response = await AxiosInstance.post('/cambiar-contrasenia', user);
+        return response.data;
+    } catch (error) {
+        console.error('Error al crear vendedor:', error);
+        throw error;
+    }
+};
+
 const updateUser = async (formData, clientId) => {
     try {
         const response = await AxiosInstance.put(`/usuario/${clientId}`, formData);
@@ -55,4 +65,4 @@ const deleteUser = async (clientId) => {
     }
 }
 
-export { getUsers, getUser, createUser, updateUser, deleteUser, createSell};
+export { getUsers, getUser, createUser, updateUser, deleteUser, createSell, changePassword};

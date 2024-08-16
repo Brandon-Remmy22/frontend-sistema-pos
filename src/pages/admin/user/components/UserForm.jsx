@@ -11,7 +11,7 @@ const UserForm = ({
   isEditing,          // Indica si se está editando un usuario
   onSubmit,           // Función para enviar el formulario
   onCancel,           // Función para cancelar la edición
-  confirmButtonText = isEditing ? 'Guardar cambios' : 'Crear cliente',  // Texto del botón de confirmación
+  confirmButtonText = isEditing ? 'Guardar cambios' : 'Crear usuario',  // Texto del botón de confirmación
   cancelButtonText = 'Cancelar',         // Texto del botón de cancelación
   confirmButtonColor = 'bg-yellow-700',    // Color del botón de confirmación
   cancelButtonColor = 'border-gray-400', // Color del botón de cancelación
@@ -77,9 +77,9 @@ const UserForm = ({
 
       if ((nombre && primerApellido && segundoApellido && fechaNacimiento && email && password)) {
         if (isCreating == true) {
-          onSubmit({id_rol:selectedRol.value.value, ...formData});
+          onSubmit({ id_rol: selectedRol.value.value, ...formData });
         } else {
-          onSubmit(updatedFormData);
+          onSubmit({ ...formData, id_rol: selectedRol.value.value });
         }
       }
     }
@@ -87,6 +87,9 @@ const UserForm = ({
 
   useEffect(() => {
     if (user) {
+      setSelectedRol({
+        label: user.rol_nombre, value: { value: parseInt(user.id_rol) }
+      });
       setFormData(user);
     }
   }, []);
@@ -123,7 +126,7 @@ const UserForm = ({
         <Input
           label="segundoApellido"
           id="segundoApellido"
-          placeholder="Ingresa segundoApellido del articulo"
+          placeholder="Ingresa segundoApellido"
           value={formData.segundoApellido}
           onChange={handleChange}
           icon={RiPhoneFindLine}
@@ -147,7 +150,8 @@ const UserForm = ({
           label="Email"
           id="email"
           type='email'
-          placeholder="Ingresa el carnet de indentidad"
+          disabled={isEditing}
+          placeholder="Ingresa el correo electronico"
           value={formData.email}
           onChange={handleChange}
           icon={RiIndeterminateCircleLine}
@@ -158,6 +162,7 @@ const UserForm = ({
         <Input
           label="Password"
           id="password"
+          disabled={isEditing}
           placeholder="Ingresa el carnet de indentidad"
           value={formData.password}
           onChange={handleChange}

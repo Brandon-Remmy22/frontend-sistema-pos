@@ -32,17 +32,11 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      authLogin(formData);
-
+    const res = await authLogin(formData);
+    if (res.status == 200) {
       showAlert('Inicio de sesion correctamente', 'success');
-    } catch (error) {
+    } else {
       showAlert('Error al inciar sesion', 'error');
-    }
-
-    if (!formData.email || !formData.password) {
-
     }
   };
 
@@ -111,12 +105,12 @@ const Login = () => {
               </div>
             </form>
             <div className="flex flex-col items-center gap-4">
-              <Link
+              {/* <Link
                 to="/forgot-password"
                 className="text-gray-600 hover:text-primary transition-colors"
               >
                 ¿Olvidaste tu contraseña?
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
