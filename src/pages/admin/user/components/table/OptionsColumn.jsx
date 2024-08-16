@@ -5,9 +5,8 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import ModalForm from '../../../../../components/ui/ModalForm';
 import DialogDelete from '../../../../../components/ui/DialogDelete';
 import { AlertContext } from '../../../../../contexts/AlertContext';
-import { deleteClient, updateClient } from '../../../../../services/client/clientService';
-import ClientForm from '../ClientForm';
-
+import { deleteUser,updateUser } from '../../../../../services/user/userService';
+import UserForm from '../UserForm';
 import {
   RiMore2Fill,
   RiUserLine,
@@ -18,11 +17,10 @@ import {
 } from 'react-icons/ri';
 
 
-const OptionsColumn = ({ client, updateClients }) => {
+const OptionsColumn = ({ user, updateUsers }) => {
 
 
   const dispatch = useDispatch();
-
   const [isOpenDialogEdit, setDialogDelete] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenImageModal, setIsOpenImageModal] = useState(false);
@@ -33,25 +31,25 @@ const OptionsColumn = ({ client, updateClients }) => {
   const actionFunctions = {
     eliminar: async () => {
       try {
-        await deleteClient(client.id);
-        showAlert('cliente eliminado correctamente', 'success');
-        updateClients();
+        await deleteUser(user.id);
+        showAlert('usere eliminado correctamente', 'success');
+        updateUsers();
         setDialogDelete(false);
       } catch (error) {
-        showAlert('Error al eliminar la cliente', 'error');
+        showAlert('Error al eliminar la usere', 'error');
       }
     },
     editar: async (formData) => {
       try {
         // Obtener los datos del formulario
         const { nombre, id } = formData;
-        await updateClient(formData, id);
-        updateClients();
-        showAlert('cliente actualizada correctamente', 'success');
+        await updateUser(formData, id);
+        updateUsers();
+        showAlert('usere actualizada correctamente', 'success');
         setFormErrors({});
         setIsOpenModal(false);
       } catch (error) {
-        showAlert('Error al actualizar cliente', 'error');
+        showAlert('Error al actualizar usere', 'error');
       }
     },
   };
@@ -78,8 +76,8 @@ const OptionsColumn = ({ client, updateClients }) => {
     actionFunctions.editar(formData);
   };
 
-  const handleConfirm = async (client) => {
-    await actionFunctions.eliminar(client);
+  const handleConfirm = async (user) => {
+    await actionFunctions.eliminar(user);
   };
 
   const handleActionClick = (actionType) => {
@@ -118,16 +116,16 @@ const OptionsColumn = ({ client, updateClients }) => {
         </MenuItems>
       </Menu>
       <DialogDelete
-        user={client}
+        user={user}
         isOpen={isOpenDialogEdit}
         setIsOpen={setDialogDelete}
-        title="Eliminar cliente"
+        title="Eliminar usere"
         description={
-          `¿Está seguro que desea eliminar el cliente ${client.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
+          `¿Está seguro que desea eliminar el usere ${user.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
         }
-        confirmButtonText={`Sí, eliminar cliente`}
+        confirmButtonText={`Sí, eliminar usere`}
         cancelButtonText="Cancelar"
-        onConfirm={() => handleConfirm(client)}
+        onConfirm={() => handleConfirm(user)}
         onCancel={handleCancel}
         confirmButtonColor={'bg-yellow-700'}
         cancelButtonColor="border-gray-400"
@@ -138,16 +136,16 @@ const OptionsColumn = ({ client, updateClients }) => {
       <ModalForm
         isOpen={isOpenModal}
         setIsOpen={setIsOpenModal}
-        title="Editar cliente"
+        title="Editar usere"
         icon={<RiEdit2Line className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
       >
-        <ClientForm
-          client={client}
+         <UserForm
+          user={user}
           isEditing={true}
           onSubmit={handleConfirmEdit}
           onCancel={handleCancelEdit}
           formErrors={formErrors}
-        /> 
+        />  
       </ModalForm>
 
     </>

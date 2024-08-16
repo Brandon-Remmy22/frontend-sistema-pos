@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
+import { Select, Option } from "@material-tailwind/react";
 import { validateName } from '../../../../utils/validations';
-
-
+import CustomSelect from '../../../../components/ui/Select';
 // Componente para el formulario de creación y edición de usuarios
-const ClientForm = ({
-  client,               // Usuario a editar
+const UserForm = ({
+  user,               // Usuario a editar
   isEditing,          // Indica si se está editando un usuario
   onSubmit,           // Función para enviar el formulario
   onCancel,           // Función para cancelar la edición
@@ -20,10 +20,9 @@ const ClientForm = ({
 
 
   // const status = useSelector((state) => state.category.status);
-  const [errors, setErrors] = useState({ nombre: '', direccion: '', telefono: '', numDocumento: '' });
-  const [formData, setFormData] = useState({ nombre: '', direccion: '', telefono: '', numDocumento: '' });
-
-
+  const [errors, setErrors] = useState({ nombre: '', primerApellido: '', segundoApellido: '', fechaNacimiento: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ nombre: '', primerApellido: '', segundoApellido: '', fechaNacimiento: '', email: '', password: '' });
+  const [selectedRol, setSelectedRol] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = '';
@@ -51,7 +50,7 @@ const ClientForm = ({
     const hasErrors = Object.values(errors).some((error) => error !== '');
     if (!hasErrors) {
       const updatedFormData = { ...formData };
-      const { nombre, direccion, telefono, numDocumento } = updatedFormData;
+      const { nombre, primerApellido, segundoApellido, fechaNacimiento, email, password } = updatedFormData;
       const isCreating = !isEditing; // Determinar si se está creando un nuevo usuario
 
       if (isCreating) {
@@ -59,20 +58,26 @@ const ClientForm = ({
         if (!nombre) {
           setErrors((prevErrors) => ({ ...prevErrors, nombre: 'El nombre es requerido.' }));
         }
-        if (!direccion) {
-          setErrors((prevErrors) => ({ ...prevErrors, direccion: 'La direccion es requerida.' }));
+        if (!primerApellido) {
+          setErrors((prevErrors) => ({ ...prevErrors, primerApellido: 'La primerApellido es requerida.' }));
         }
-        if (!telefono) {
-          setErrors((prevErrors) => ({ ...prevErrors, telefono: 'El telefono es requerido.' }));
+        if (!segundoApellido) {
+          setErrors((prevErrors) => ({ ...prevErrors, segundoApellido: 'El segundoApellido es requerido.' }));
         }
-        if (!numDocumento) {
-          setErrors((prevErrors) => ({ ...prevErrors, numDocumento: 'El carnet de indentidad es requerido.' }));
+        if (!fechaNacimiento) {
+          setErrors((prevErrors) => ({ ...prevErrors, fechaNacimiento: 'El carnet de indentidad es requerido.' }));
+        }
+        if (!email) {
+          setErrors((prevErrors) => ({ ...prevErrors, email: 'El carnet de indentidad es requerido.' }));
+        }
+        if (!password) {
+          setErrors((prevErrors) => ({ ...prevErrors, password: 'El carnet de indentidad es requerido.' }));
         }
       }
 
-      if ((nombre && direccion && telefono && numDocumento)) {
+      if ((nombre && primerApellido && segundoApellido && fechaNacimiento && email && password)) {
         if (isCreating == true) {
-          onSubmit(formData);
+          onSubmit({id_rol:selectedRol.value.value, ...formData});
         } else {
           onSubmit(updatedFormData);
         }
@@ -81,10 +86,14 @@ const ClientForm = ({
   };
 
   useEffect(() => {
-    if (client) {
-      setFormData(client);
+    if (user) {
+      setFormData(user);
     }
   }, []);
+
+  const handleUserChange = (option) => {
+    setSelectedRol(option);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -101,37 +110,76 @@ const ClientForm = ({
       </div>
       <div className='mt-2'>
         <Input
-          label="Direccion"
-          id="direccion"
-          placeholder="Ingresa direccion"
-          value={formData.direccion}
+          label="primerApellido"
+          id="primerApellido"
+          placeholder="Ingresa primerApellido"
+          value={formData.primerApellido}
           onChange={handleChange}
           icon={RiHome2Line}
-          error={errors.direccion}
+          error={errors.primerApellido}
         />
       </div>
       <div className='mt-2'>
         <Input
-          label="Telefono"
-          id="telefono"
-          placeholder="Ingresa telefono del articulo"
-          value={formData.telefono}
+          label="segundoApellido"
+          id="segundoApellido"
+          placeholder="Ingresa segundoApellido del articulo"
+          value={formData.segundoApellido}
           onChange={handleChange}
           icon={RiPhoneFindLine}
-          error={errors.telefono}
+          error={errors.segundoApellido}
         />
       </div>
       <div className='mt-2'>
         <Input
-          label="Carnet de identidad"
-          id="numDocumento"
+          label="Fecha de Nacimiento"
+          id="fechaNacimiento"
+          type='date'
           placeholder="Ingresa el carnet de indentidad"
-          value={formData.numDocumento}
+          value={formData.fechaNacimiento}
           onChange={handleChange}
           icon={RiIndeterminateCircleLine}
-          error={errors.numDocumento}
+          error={errors.fechaNacimiento}
         />
       </div>
+      <div className='mt-2'>
+        <Input
+          label="Email"
+          id="email"
+          type='email'
+          placeholder="Ingresa el carnet de indentidad"
+          value={formData.email}
+          onChange={handleChange}
+          icon={RiIndeterminateCircleLine}
+          error={errors.email}
+        />
+      </div>
+      <div className='mt-2'>
+        <Input
+          label="Password"
+          id="password"
+          placeholder="Ingresa el carnet de indentidad"
+          value={formData.password}
+          onChange={handleChange}
+          icon={RiIndeterminateCircleLine}
+          error={errors.password}
+        />
+      </div>
+
+      <div className='mt-2'>
+        <CustomSelect
+          label="Rol"
+          options={[{ nombre: 'Administrador', value: 1 },
+          { nombre: 'Vendedor', value: 2 },]}
+          value={selectedRol}
+          onChange={handleUserChange}
+          placeholder="Selecciona un rol"
+          error={errors.employee_id}
+          isSearchable={true}
+          labelKey='nombre'
+        />
+      </div>
+
 
       <div className="mt-6 flex items-center gap-x-2">
         <button
@@ -152,4 +200,4 @@ const ClientForm = ({
   );
 };
 
-export default ClientForm;
+export default UserForm;

@@ -11,6 +11,7 @@ import LayoutAdmin from "./layouts/LayoutAdmin";
 
 
 import Login from "./pages/auth/Login";
+import ChangePassword from './pages/auth/ChangePassword';
 import Home from "./pages/admin/Home";
 import ClientIndex from './pages/admin/client/Index';
 import UserIndex from './pages/admin/user/Index';
@@ -27,6 +28,7 @@ function App() {
           <Routes location={location} key={location.pathname}>
             <Route element={<PublicRoute />}>
               <Route path="/login" element={<Login />} />
+              <Route path="/cambiar-contrasenia" element={<ChangePassword />} />
             </Route>
 
             <Route element={<PrivateRoute />}>

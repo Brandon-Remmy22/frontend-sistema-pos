@@ -99,7 +99,7 @@ const ClientIndex = () => {
                     isOpen={isOpenCreateModal}
                     setIsOpen={setIsOpenCreateModal}
                     title="Crear nuevo cliente"
-                    icon={<RiUser3Fill className="w-6 h-6 flex items-center justify-center rounded-full text-blue-500" />}
+                    icon={<RiUser3Fill className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
                     maxWidth='max-w-md'
                 >
                     <ClientForm

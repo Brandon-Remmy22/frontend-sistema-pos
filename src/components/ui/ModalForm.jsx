@@ -42,10 +42,10 @@ const ModalForm = ({
                         >
                             <DialogPanel className={`w-full ${maxWidth} transform overflow-hidden rounded-2xl bg-slate-100 p-2 text-left align-middle shadow-xl transition-all`}>
                                 {/* Encabezado */}
-                                <div className="bg-gray-300 px-2 py-3 rounded-t-2xl flex items-center justify-between">
+                                <div className="bg-[#bf7103] px-2 py-3 rounded-t-2xl flex items-center justify-between">
                                     <div className="flex items-center">
                                         <div className="mr-4">{icon}</div>
-                                        <DialogTitle as="h3" className="text-lg font-medium leading-6">
+                                        <DialogTitle as="h3" className="text-lg text-gray-50 font-medium bg leading-6">
                                             {title}
                                         </DialogTitle>
                                     </div>

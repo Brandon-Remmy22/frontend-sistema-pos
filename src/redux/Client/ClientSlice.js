@@ -1,4 +1,4 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getClients, getClient } from "../../services/client/clientService";
 
 export const getClientsFetch = createAsyncThunk(
@@ -60,7 +60,7 @@ export const clientSlice = createSlice({
             });
     }
 });
-export const { updateClients, clearClient  } = clientSlice.actions;
+export const { updateClients, clearClient } = clientSlice.actions;
 
 export const selectClients = (state) => state.client?.clients;
 export const selectClient = (state) => state.client?.client;

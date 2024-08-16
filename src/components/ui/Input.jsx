@@ -11,7 +11,7 @@ const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: I
     error
       ? 'border-red-300 focus:border-red-300 focus:ring-red-300 focus:shadow-md focus:shadow-red-300/50'
       : isFocused
-      ? 'border-blue-300 focus:border-blue-300 focus:ring-blue-300 focus:shadow-md focus:shadow-blue-300/50'
+      ? 'border-yellow-700 focus:border-yellow-700 focus:ring-yellow-700 focus:shadow-md focus:shadow-yellow-700/50'
       : 'border-gray-300'
   } outline-none`;
 
@@ -23,7 +23,7 @@ const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: I
       <label htmlFor={id} className="block text-base font-semibold text-gray-800 mb-1">
         {label}
       </label>
-      <div className="relative rounded-lg shadow-lg transition-all duration-300">
+      <div className="relative rounded-lg shadow-sm transition-all duration-300">
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <div className="w-8 h-8 flex items-center justify-center">
             {IconComponent ? (
