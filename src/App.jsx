@@ -15,6 +15,7 @@ import ChangePassword from './pages/auth/ChangePassword';
 import Home from "./pages/admin/Home";
 import ClientIndex from './pages/admin/client/Index';
 import UserIndex from './pages/admin/user/Index';
+import ArticleIndex from './pages/admin/article/Index';
 
 function App() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function App() {
                 <Route index element={<Home />} />
                 <Route path="/clientes" element={<ClientIndex />} />
                 <Route path="/usuarios" element={<UserIndex />} />
+                <Route path="/productos" element={<ArticleIndex />} />
               </Route>
             </Route>
           </Routes>

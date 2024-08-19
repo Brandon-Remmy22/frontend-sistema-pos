@@ -12,6 +12,7 @@ import {
   RiArrowDropRightLine,
   RiUser3Line,
   RiCustomerService2Line,
+  RiArticleLine,
 } from "react-icons/ri";
 
 
@@ -131,6 +132,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   </Link>
                 </li>
               </ul>
+            </li>
+            <li className="group">
+              <Link
+                to="/productos"
+                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+              >
+                <RiArticleLine className="text-primary text-xl group-hover:text-yellow-500" /> Productos
+              </Link>
             </li>
             <li className="group">
               <Link
