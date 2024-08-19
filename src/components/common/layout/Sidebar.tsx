@@ -122,13 +122,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <ul
                 className={` ${activeSubmenu === 3 ? "h-auto" : "h-0"} overflow-y-hidden transition-all`}
               >
-                <li>
+                {/* <li>
                   <Link
                     to="#"
                     className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
                   >
                     <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
                     Rol
+                  </Link>
+                </li> */}
+                <li>
+                  <Link
+                    to="/categorias"
+                    className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
+                  >
+                    <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
+                    Categorias
                   </Link>
                 </li>
               </ul>
