@@ -10,18 +10,19 @@ import {
     Button,
 } from "@material-tailwind/react";
 import ModalForm from '../../../components/ui/ModalForm';
-import ClientForm from './components/ClientForm';
+// import ClientForm from './components/ClientForm';
 
-import { getClientsFetch, selectClients } from '../../../redux/Client/ClientSlice';
-import { createClient } from '../../../services/client/clientService';
 
+import { getSalesFetch, selectSales } from '../../../redux/Sale/SaleSlice';
+import { createSale } from '../../../services/sale/saleService';
 import { AlertContext } from '../../../contexts/AlertContext';
-import ClientTable from './components/table/ClientTable';
+// import ClientTable from './components/table/ClientTable';
+import SaleTable from './components/table/SaleTable';
 import { Link } from 'react-router-dom';
 
 
 
-const ClientIndex = () => {
+const SaleIndex = () => {
 
     const dispatch = useDispatch();
     const [showTable, setShowTable] = useState(false);
@@ -32,21 +33,21 @@ const ClientIndex = () => {
 
 
 
-    const clients = useSelector(selectClients);
-    const status = useSelector((state) => state.client.status);
+    const sales = useSelector(selectSales);
+    const status = useSelector((state) => state.sale.status);
 
 
     useEffect(() => {
-        dispatch(getClientsFetch());
+        dispatch(getSalesFetch());
     }, [dispatch]);
 
-    const memoizedClients = useMemo(() => clients, [clients]);
+    const memoizedClients = useMemo(() => sales, [sales]);
 
     useEffect(() => {
         if (status === 'succeeded') {
             setShowTable(true);
         }
-    }, [status, clients]);
+    }, [status, sales]);
 
     const handleOpenCreateModal = () => {
         setIsOpenCreateModal(true);
@@ -55,13 +56,13 @@ const ClientIndex = () => {
 
     const handleCreateClient = async (formData) => {
         try {
-            await createClient(formData);
-            showAlert('Cliente creado correctamente', 'success');
+            await createSale(formData);
+            showAlert('Venta creado correctamente', 'success');
             setIsOpenCreateModal(false);
             setFormErrors({});
-            dispatch(getClientsFetch());
+            dispatch(getSalesFetch());
         } catch (error) {
-            showAlert('Error al crear Cliente', 'error');
+            showAlert('Error al crear Venta', 'error');
         }
     }
 
@@ -71,26 +72,26 @@ const ClientIndex = () => {
                 <div className="mb-2 flex items-center justify-between gap-8">
                     <div>
                         <Typography variant="h5" color="blue-gray" className="font-semibold">
-                            Clientes
+                            Ventas
                         </Typography>
 
 
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                        <Button
-                            className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
-                        
-                            onClick={handleOpenCreateModal}
+                        <Link
+                            to="/nueva-venta"
+                             className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
+                            size="sm"
                         >
-                            <RiAddLargeFill className="h-5 w-5" />
-                            <span className="font-semibold">Nuevo cliente</span>
-                        </Button>
+                            <RiPushpinFill className="h-5 w-5" />
+                            <span className="font-semibold">Nueva venta</span>
+                        </Link>
 
                     </div>
                 </div>
                 <div>
                     {showTable ? (
-                        <ClientTable clients={clients} />
+                        <SaleTable sales={sales} />
                     ) : (
                         <div>no existe tabla</div>
                     )}
@@ -98,16 +99,16 @@ const ClientIndex = () => {
                 <ModalForm
                     isOpen={isOpenCreateModal}
                     setIsOpen={setIsOpenCreateModal}
-                    title="Crear nuevo cliente"
+                    title="Crear nuevo Venta"
                     icon={<RiUser3Fill className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
                     maxWidth='max-w-md'
                 >
-                    <ClientForm
+                    {/* <ClientForm
                         isEditing={false}
                         onSubmit={handleCreateClient}
                         onCancel={() => setIsOpenCreateModal(false)}
                         formErrors={formErrors}
-                    />
+                    /> */} foprmuarios de vetnas
                 </ModalForm>
             </CardHeader>
 
@@ -115,4 +116,4 @@ const ClientIndex = () => {
     );
 }
 
-export default ClientIndex;
+export default SaleIndex;

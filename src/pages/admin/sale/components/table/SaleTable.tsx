@@ -11,46 +11,32 @@ import {
 import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
-import { getArticlesFetch } from '../../../../../redux/Article/ArticleSlice';
+import { getSalesFetch } from '../../../../../redux/Sale/SaleSlice';
 
-const ArticleTable = ({ articles }) => {
+
+const SaleTable = ({ sales }) => {
   const columns = [
     {
-      header: "Nombre",
-      accessorKey: "nombre",
+      header: "num_documento",
+      accessorKey: "num_documento",
     },
     {
-      header: "descripcion",
-      accessorKey: "descripcion",
+      header: "nombre_cliente",
+      accessorKey: "nombre_cliente",
     },
     {
-      header: "precio",
-      accessorKey: "precio",
+      header: "total",
+      accessorKey: "total",
     },
     {
-      header: "stock",
-      accessorKey: "stock",
-    },
-    {
-      header: "categoria",
-      accessorKey: "categoria_nombre",
-    },
-    {
-      header: "img",
-      accessorKey: "img",
-      cell: ({ row }) => (
-        <img
-          src={`http://localhost:8080/uploads/${row.original.img}`}
-          alt={row.original.nombre}  // Texto alternativo usando el nombre del artículo
-          className="w-16 h-16 object-cover rounded"
-        />  
-      ),
+      header: "Fecha",
+      accessorKey: "fechaCreacion",
     },
     {
       id: 'actions',
       header: 'Acciones',
       cell: ({ row }) => (
-        <OptionsColumn article={row.original} updateArticles={updateArticles} />
+        <OptionsColumn client={row.original} updateClients={updateClients} />
       ),
     },
 
@@ -61,8 +47,10 @@ const ArticleTable = ({ articles }) => {
     []
   )
 
+
+
   const [table, setTable] = useState(useReactTable({
-    data: articles, // Initially empty
+    data: sales, // Initially empty
     columns,
     state: {
       columnFilters,
@@ -73,9 +61,8 @@ const ArticleTable = ({ articles }) => {
     getPaginationRowModel: getPaginationRowModel(),
     onGlobalFilterChange: setGlobalFilter,
   }));
-
-  const updateArticles = () => {
-    dispatch(getArticlesFetch());
+  const updateClients = () => {
+    dispatch(getSalesFetch());
   }
   return (
     <>
@@ -192,4 +179,4 @@ const ArticleTable = ({ articles }) => {
 }
 
 
-export default ArticleTable;
+export default SaleTable;

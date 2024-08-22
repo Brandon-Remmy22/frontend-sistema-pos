@@ -17,6 +17,8 @@ import ClientIndex from './pages/admin/client/Index';
 import UserIndex from './pages/admin/user/Index';
 import ArticleIndex from './pages/admin/article/Index';
 import CategoryIndex from './pages/admin/category/Index';
+import SaleIndex from './pages/admin/sale/Index';
+import AddSale from './pages/admin/sale/AddSale';
 
 function App() {
   const location = useLocation();
@@ -40,6 +42,8 @@ function App() {
                 <Route path="/usuarios" element={<UserIndex />} />
                 <Route path="/productos" element={<ArticleIndex />} />
                 <Route path="/categorias" element={<CategoryIndex />} />
+                <Route path="/ventas" element={<SaleIndex />} />
+                <Route path="/nueva-venta" element={<AddSale />} />
               </Route>
             </Route>
           </Routes>

@@ -24,10 +24,6 @@ const CategoryTable = ({  categories }) => {
       header: "Descripcion",
       accessorKey: "descripcion",
     },
-    // {
-    //   header: "Creacion",
-    //   accessorKey: "fechaCreacion",
-    // },
     {
       id: 'actions',
       header: 'Acciones',

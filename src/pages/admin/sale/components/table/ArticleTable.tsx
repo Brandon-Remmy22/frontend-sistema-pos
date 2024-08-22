@@ -8,21 +8,21 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
 import { getArticlesFetch } from '../../../../../redux/Article/ArticleSlice';
+import { RiAddCircleLine, RiCircleLine } from 'react-icons/ri';
 
-const ArticleTable = ({ articles }) => {
+const ArticleTable = ({ articles, addArticle }) => {
   const columns = [
     {
       header: "Nombre",
       accessorKey: "nombre",
     },
-    {
-      header: "descripcion",
-      accessorKey: "descripcion",
-    },
+    // {
+    //   header: "descripcion",
+    //   accessorKey: "descripcion",
+    // },
     {
       header: "precio",
       accessorKey: "precio",
@@ -32,25 +32,10 @@ const ArticleTable = ({ articles }) => {
       accessorKey: "stock",
     },
     {
-      header: "categoria",
-      accessorKey: "categoria_nombre",
-    },
-    {
-      header: "img",
-      accessorKey: "img",
-      cell: ({ row }) => (
-        <img
-          src={`http://localhost:8080/uploads/${row.original.img}`}
-          alt={row.original.nombre}  // Texto alternativo usando el nombre del artículo
-          className="w-16 h-16 object-cover rounded"
-        />  
-      ),
-    },
-    {
       id: 'actions',
       header: 'Acciones',
       cell: ({ row }) => (
-        <OptionsColumn article={row.original} updateArticles={updateArticles} />
+        <button onClick={() => addArticle(row.original)}><RiAddCircleLine size={23}></RiAddCircleLine></button>
       ),
     },
 
@@ -85,7 +70,7 @@ const ArticleTable = ({ articles }) => {
             type="text"
             value={globalFilter ?? ''}
             onChange={e => setGlobalFilter(e.target.value)}
-            placeholder="Buscar..."
+            placeholder="Buscar producto..."
             className="border p-2 rounded w-full md:w-[200px]"
             style={{ borderColor: '#93A8FF' }}
           />
@@ -107,7 +92,6 @@ const ArticleTable = ({ articles }) => {
             </thead>
             <tbody className='text-gray-700 text-md bg-white'>
               {table.getRowModel().rows.map(row => (
-
                 <tr className="border-b border-gray-200 hover:bg-gray-100 group"
                   style={{ minHeight: '50px' }} key={row.id}>
                   {

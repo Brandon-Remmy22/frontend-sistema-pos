@@ -32,6 +32,9 @@ export const clientSlice = createSlice({
         },
         clearClient: (state) => {
             state.client = {};
+        },
+        selectedClientRedux: (state, action) => {
+            state.client = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -60,7 +63,7 @@ export const clientSlice = createSlice({
             });
     }
 });
-export const { updateClients, clearClient } = clientSlice.actions;
+export const { updateClients, clearClient, selectedClientRedux } = clientSlice.actions;
 
 export const selectClients = (state) => state.client?.clients;
 export const selectClient = (state) => state.client?.client;

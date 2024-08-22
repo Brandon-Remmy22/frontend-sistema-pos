@@ -57,9 +57,7 @@ const CustomSelect = ({
           : value
             ? 'rgb(209 213 219)' // Si hay una opción seleccionada, color gris
             : '#e5e7eb', // Si no hay error, foco ni opción seleccionada, color gris claro
-      boxShadow: state.isFocused
-        ? '0 0 0 rgb(96 165 250 / 50%), 0 1px 3px 0 rgb(0 0 0 / 30%), 0 2px 3px 0 rgb(147 197 253/ 20%)'
-        : '0 10px 15px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%)',
+
       '&:hover': {
         borderColor: selectError ? '#fca5a5' : state.isFocused ? '#93c5fd' : 'none',
       },

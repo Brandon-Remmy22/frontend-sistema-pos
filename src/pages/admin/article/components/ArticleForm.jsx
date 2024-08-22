@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
 import { validateName } from '../../../../utils/validations';
+import CustomSelect from '../../../../components/ui/Select';
+import { getClientsFetch, selectClients } from '../../../../redux/Client/ClientSlice';
+import { getCategories } from '../../../../services/category/categoryService';
+
 import axios from 'axios';
 
 // Componente para el formulario de creación y edición de usuarios
@@ -23,7 +27,11 @@ const ArticleForm = ({
   const [errors, setErrors] = useState({ nombre: '', descripcion: '', precio: '', stock: '', codigo: '', img: '' });
   const [formData, setFormData] = useState({ nombre: '', descripcion: '', precio: '', stock: '', codigo: '', img: '' });
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const dispatch = useDispatch();
+  const [categories, setCategories] = useState([]);
+  const clients = useSelector(selectClients);
+  const status = useSelector((state) => state.client.status);
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = '';
@@ -40,6 +48,13 @@ const ArticleForm = ({
   };
   // Función para manejar el cambio del campo de estado de usuario
 
+
+  const actionFunctions = {
+    getCategories: async () => {
+      const response = await getCategories();
+      setCategories(response.categorias);
+    }
+  };
 
 
 
@@ -78,9 +93,9 @@ const ArticleForm = ({
 
       if ((nombre && descripcion && precio && stock)) {
         if (isCreating == true) {
-          onSubmit({...formData, img:selectedFile });
+          onSubmit({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id });
         } else {
-          onSubmit({...updatedFormData, img:selectedFile });
+          onSubmit({ ...updatedFormData, img: selectedFile, id_categoria: selectedCategory.value.id });
         }
       }
     }
@@ -88,6 +103,9 @@ const ArticleForm = ({
 
   useEffect(() => {
     if (article) {
+      setSelectedCategory({
+        label: article.categoria_nombre, value: { value: parseInt(article.id_categoria) }
+      });
       setFormData(article);
       setSelectedFile(article.img);
     }
@@ -106,6 +124,10 @@ const ArticleForm = ({
       });
   };
 
+  useEffect(() => {
+    actionFunctions.getCategories();
+  }, []);
+
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -116,6 +138,10 @@ const ArticleForm = ({
 
   const handleDragOver = (event) => {
     event.preventDefault();
+  };
+
+  const handleCategoryChange = (option) => {
+    setSelectedCategory(option);
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -174,6 +200,17 @@ const ArticleForm = ({
           onChange={handleChange}
           icon={RiIndeterminateCircleLine}
           error={errors.codigo}
+        />
+      </div>
+      <div className='mt-2'>
+        <CustomSelect
+          label="Categoria"
+          options={categories}
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          placeholder="Selecciona una categoria"
+          isSearchable={true}
+          labelKey='nombre'
         />
       </div>
       <div className='mt-2'>
