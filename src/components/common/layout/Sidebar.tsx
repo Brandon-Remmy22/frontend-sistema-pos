@@ -102,10 +102,41 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 to=""
                 className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
               >
-                <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Tablero
+                <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Reportes
               </Link>
             </li>
-
+            <li className="group">
+              <Link
+                to="/ventas"
+                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+              >
+                <RiMoneyDollarCircleLine className="text-primary text-xl group-hover:text-yellow-500" /> Ventas
+              </Link>
+            </li>
+            <li className="group">
+              <Link
+                to="/productos"
+                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+              >
+                <RiArticleLine className="text-primary text-xl group-hover:text-yellow-500" /> Productos
+              </Link>
+            </li>
+            <li className="group">
+              <Link
+                to="/usuarios"
+                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+              >
+                <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
+              </Link>
+            </li>
+            <li className="group">
+              <Link
+                to="/clientes"
+                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+              >
+                <RiCustomerService2Line className="text-primary text-xl group-hover:text-yellow-500" /> Clientes
+              </Link>
+            </li>
 
             <li className="group">
               <button
@@ -143,39 +174,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </li>
               </ul>
             </li>
-            <li className="group">
-              <Link
-                to="/ventas"
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiMoneyDollarCircleLine className="text-primary text-xl group-hover:text-yellow-500" /> Ventas
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                to="/productos"
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiArticleLine className="text-primary text-xl group-hover:text-yellow-500" /> Productos
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                to="/usuarios"
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                to="/clientes"
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiCustomerService2Line className="text-primary text-xl group-hover:text-yellow-500" /> Clientes
-              </Link>
-            </li>
-
           </ul>
         </div>
         <nav className="text-center p-5">

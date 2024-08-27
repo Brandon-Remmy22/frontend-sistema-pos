@@ -1,5 +1,13 @@
 import AxiosInstance from "../axiosInstance";
 
+const getReports = async () => {
+    try {
+        const response = await AxiosInstance.get('/reporte/ventas');
+        return response.data;
+    } catch (error) {
+
+    }
+}
 const getSales = async () => {
     try {
         const response = await AxiosInstance.get('/venta');
@@ -46,4 +54,4 @@ const deleteSale = async (id) => {
     }
 }
 
-export { getSales, getSale, createSale, updateSale, deleteSale };
+export { getSales, getSale, createSale, updateSale, deleteSale, getReports };

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
@@ -18,11 +18,14 @@ import {
   RiInformation2Line,
 } from 'react-icons/ri';
 
+import { pdf } from '@react-pdf/renderer'
+import DetailsSalePdf from '../reports/DetailsSalePdf';
 
 const OptionsColumn = ({ client, updateClients }) => {
 
 
   const dispatch = useDispatch();
+  const referencia = useRef(null);
 
   const [isOpenDialogEdit, setDialogDelete] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -87,6 +90,15 @@ const OptionsColumn = ({ client, updateClients }) => {
     setDialogDelete(true);
     // setAction(actionType);
   };
+
+  const openPDFInNewWindow = async () => {
+    console.log(client);
+    const blob = await pdf(<DetailsSalePdf client={client} />).toBlob();
+    const url = URL.createObjectURL(blob);
+  
+    // Abre el PDF en una nueva ventana o pestaña
+    window.open(url);
+};
   return (
     <>
       <Menu>
@@ -114,11 +126,14 @@ const OptionsColumn = ({ client, updateClients }) => {
             </button>
           </MenuItem> */}
           <MenuItem>
-            <button onClick={() => handleActionClick('eliminar')} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+            
+              <button onClick={openPDFInNewWindow } className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
 
-              Descargar reporte
+                Descargar PDF
 
-            </button>
+              </button>
+
+
           </MenuItem>
           <div className="my-1 h-px bg-white/5" />
 
