@@ -17,7 +17,7 @@ import { createClient } from '../../../services/client/clientService';
 
 import { AlertContext } from '../../../contexts/AlertContext';
 import ClientTable from './components/table/ClientTable';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../../../hooks/useAuth';
 
 
 
@@ -28,8 +28,7 @@ const ClientIndex = () => {
     const [formErrors, setFormErrors] = useState({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const { showAlert } = useContext(AlertContext);
-
-
+    const { userRole } = useAuth();
 
 
     const clients = useSelector(selectClients);
@@ -77,6 +76,7 @@ const ClientIndex = () => {
 
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                      
                         <Button
                             className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
                         

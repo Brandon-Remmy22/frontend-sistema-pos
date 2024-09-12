@@ -93,9 +93,9 @@ const ArticleForm = ({
 
       if ((nombre && descripcion && precio && stock)) {
         if (isCreating == true) {
-          onSubmit({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id });
+          onSubmit({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id, codigo: "50" });
         } else {
-          onSubmit({ ...updatedFormData, img: selectedFile, id_categoria: selectedCategory.value.id });
+          onSubmit({ ...updatedFormData, img: selectedFile, id_categoria: selectedCategory.value.id, codigo: "50"  });
         }
       }
     }
@@ -191,7 +191,7 @@ const ArticleForm = ({
           error={errors.stock}
         />
       </div>
-      <div className='mt-2'>
+      {/* <div className='mt-2'>
         <Input
           label="codigo de identidad"
           id="codigo"
@@ -201,7 +201,7 @@ const ArticleForm = ({
           icon={RiIndeterminateCircleLine}
           error={errors.codigo}
         />
-      </div>
+      </div> */}
       <div className='mt-2'>
         <CustomSelect
           label="Categoria"

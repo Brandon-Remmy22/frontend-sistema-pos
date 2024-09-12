@@ -12,8 +12,12 @@ import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
 import { getArticlesFetch } from '../../../../../redux/Article/ArticleSlice';
+import { useAuth } from '../../../../../hooks/useAuth';
+
 
 const ArticleTable = ({ articles }) => {
+
+  const { userRole } = useAuth();
   const columns = [
     {
       header: "Nombre",
@@ -43,14 +47,18 @@ const ArticleTable = ({ articles }) => {
           src={`http://localhost:8080/uploads/${row.original.img}`}
           alt={row.original.nombre}  // Texto alternativo usando el nombre del artículo
           className="w-16 h-16 object-cover rounded"
-        />  
+        />
       ),
     },
     {
       id: 'actions',
-      header: 'Acciones',
+      header:  userRole === '1'? 'Acciones':'',
       cell: ({ row }) => (
-        <OptionsColumn article={row.original} updateArticles={updateArticles} />
+        <>
+          {userRole === '1' && (
+            <OptionsColumn article={row.original} updateArticles={updateArticles} />
+          )}
+        </>
       ),
     },
 
@@ -77,10 +85,12 @@ const ArticleTable = ({ articles }) => {
   const updateArticles = () => {
     dispatch(getArticlesFetch());
   }
+
   return (
     <>
       <div>
         <div className="mb-4">
+          {userRole === '1' && (<>                        </>)}
           <input
             type="text"
             value={globalFilter ?? ''}

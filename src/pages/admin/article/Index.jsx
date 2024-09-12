@@ -18,7 +18,7 @@ import { createArticle } from '../../../services/article/articleService';
 
 import { AlertContext } from '../../../contexts/AlertContext';
 import ArticleTable from './components/table/ArticleTable';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../../../hooks/useAuth';
 
 
 
@@ -29,7 +29,7 @@ const ArticleIndex = () => {
     const [formErrors, setFormErrors] = useState({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const { showAlert } = useContext(AlertContext);
-
+    const { userRole } = useAuth();
 
 
 
@@ -61,7 +61,6 @@ const ArticleIndex = () => {
             setIsOpenCreateModal(false);
             setFormErrors({});
             dispatch(getArticlesFetch());
-            console.log(formData);
         } catch (error) {
             showAlert('Error al crear Producto', 'error');
         }
@@ -79,14 +78,16 @@ const ArticleIndex = () => {
 
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                        <Button
+                        {userRole === '1' && (<>                                                <Button
                             className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
                             size="sm"
                             onClick={handleOpenCreateModal}
                         >
                             <RiAddLargeFill className="h-5 w-5" />
                             <span className="font-semibold">Nuevo Producto</span>
-                        </Button>
+                        </Button></>)}
+
+
 
                     </div>
                 </div>

@@ -12,8 +12,11 @@ import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
 import { getClientsFetch } from '../../../../../redux/Client/ClientSlice';
+import { useAuth } from '../../../../../hooks/useAuth';
+
 
 const ClientTable = ({ clients }) => {
+  const { userRole } = useAuth();
   const columns = [
     {
       header: "Nombre",

@@ -25,6 +25,10 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [usuario, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('userAuth');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const [activeSubmenu, setActiveSubmenu] = useState(3);
 
@@ -121,14 +125,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <RiArticleLine className="text-primary text-xl group-hover:text-yellow-500" /> Productos
               </Link>
             </li>
-            <li className="group">
-              <Link
-                to="/usuarios"
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
-              </Link>
-            </li>
+            {userRole === '1' && (
+              <li className="group">
+                <Link
+                  to="/usuarios"
+                  className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+                >
+                  <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
+                </Link>
+              </li>             
+            )}
+
             <li className="group">
               <Link
                 to="/clientes"
@@ -137,43 +144,45 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <RiCustomerService2Line className="text-primary text-xl group-hover:text-yellow-500" /> Clientes
               </Link>
             </li>
-
-            <li className="group">
-              <button
-                onClick={() => toggleSubMenu(3)}
-                className="w-full flex text-secondary-100 items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <span className="flex items-center gap-4">
-                  <RiSettings3Line className="text-primary text-xl group-hover:text-yellow-500" />{" "}
-                  Configuraciones
-                </span>
-                <RiArrowRightSLine
-                  className={`mt-1 ${activeSubmenu === 3 && "rotate-90"} transition-all`}
-                />
-              </button>
-              <ul
-                className={` ${activeSubmenu === 3 ? "h-auto" : "h-0"} overflow-y-hidden transition-all`}
-              >
-                {/* <li>
-                  <Link
-                    to="#"
-                    className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
-                  >
-                    <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
-                    Rol
-                  </Link>
-                </li> */}
-                <li>
-                  <Link
-                    to="/categorias"
-                    className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
-                  >
-                    <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
-                    Categorias
-                  </Link>
-                </li>
-              </ul>
-            </li>
+            {userRole === '1' && (
+              <li className="group">
+                <button
+                  onClick={() => toggleSubMenu(3)}
+                  className="w-full flex text-secondary-100 items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+                >
+                  <span className="flex items-center gap-4">
+                    <RiSettings3Line className="text-primary text-xl group-hover:text-yellow-500" />{" "}
+                    Configuraciones
+                  </span>
+                  <RiArrowRightSLine
+                    className={`mt-1 ${activeSubmenu === 3 && "rotate-90"} transition-all`}
+                  />
+                </button>
+                <ul
+                  className={` ${activeSubmenu === 3 ? "h-auto" : "h-0"} overflow-y-hidden transition-all`}
+                >
+                  {/* <li>
+         <Link
+           to="#"
+           className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
+         >
+           <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
+           Rol
+         </Link>
+       </li> */}
+                  <li>
+                    <Link
+                      to="/categorias"
+                      className="flex items-center gap-2 py-1 text-secondary-100 px-4 ml-6  relative hover:text-primary transition-colors"
+                    >
+                      <RiArrowDropRightLine className="text-primary text-xl group-hover:text-yellow-500 inline-block" />
+                      Categorias
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            )}
+    
           </ul>
         </div>
         <nav className="text-center p-5">

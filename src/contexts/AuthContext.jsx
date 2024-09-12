@@ -10,12 +10,14 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
 
   const authLogin = async (credentials) => {
     try {
       const response = await login(credentials);
       localStorage.setItem('userAuth', JSON.stringify(response.user))
+      localStorage.setItem('userRole', response.user.id_rol);
+      setUserRole(response.user.id_rol);
       setIsAuthenticated(true);
       navigate('/');
       return response;
