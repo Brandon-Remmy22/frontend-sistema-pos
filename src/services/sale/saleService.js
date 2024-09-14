@@ -8,6 +8,15 @@ const getReports = async () => {
 
     }
 }
+
+const getProductsSalesBetter = async () => {
+    try {
+        const response = await AxiosInstance.get('/reporte/mas-vendidos');
+        return response.data;
+    } catch (error) {
+
+    }
+}
 const getSales = async () => {
     try {
         const response = await AxiosInstance.get('/venta');
@@ -54,4 +63,4 @@ const deleteSale = async (id) => {
     }
 }
 
-export { getSales, getSale, createSale, updateSale, deleteSale, getReports };
+export { getSales, getSale, createSale, updateSale, deleteSale, getReports, getProductsSalesBetter };

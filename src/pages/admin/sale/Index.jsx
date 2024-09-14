@@ -1,6 +1,6 @@
 import react, { useState, useContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RiGalleryView2, RiPushpinFill, RiListView, RiDeleteBack2Fill, RiEdit2Fill, RiAddLargeFill, RiUser3Fill } from "react-icons/ri";
+import { RiGalleryView2, RiPushpinFill, RiListView, RiDeleteBack2Fill, RiEdit2Fill, RiAddLargeFill, RiUser3Fill, RiFilePdf2Line } from "react-icons/ri";
 import {
     Card,
     CardBody,
@@ -14,12 +14,14 @@ import ModalForm from '../../../components/ui/ModalForm';
 
 
 import { getSalesFetch, selectSales } from '../../../redux/Sale/SaleSlice';
-import { createSale } from '../../../services/sale/saleService';
+import { getProductsSalesBetter } from '../../../services/sale/saleService';
 import { AlertContext } from '../../../contexts/AlertContext';
 // import ClientTable from './components/table/ClientTable';
 import SaleTable from './components/table/SaleTable';
 import { Link } from 'react-router-dom';
-
+import { pdf } from '@react-pdf/renderer';
+import DetailsSaleGeneral from './components/reports/DetailsSaleGeneral';
+import DetailsSalesBetter from './components/reports/DetailsSalesBetter';
 
 
 const SaleIndex = () => {
@@ -46,6 +48,7 @@ const SaleIndex = () => {
     useEffect(() => {
         if (status === 'succeeded') {
             setShowTable(true);
+            console.log(sales);
         }
     }, [status, sales]);
 
@@ -54,17 +57,32 @@ const SaleIndex = () => {
         setFormErrors({});
     };
 
-    const handleCreateClient = async (formData) => {
+    const getProductsSales = async () => {
         try {
-            await createSale(formData);
-            showAlert('Venta creado correctamente', 'success');
-            setIsOpenCreateModal(false);
-            setFormErrors({});
-            dispatch(getSalesFetch());
+            const data = await getProductsSalesBetter();
+            const top5Ventas = data.ventas
+                .sort((a, b) => parseFloat(b.cantidad) - parseFloat(a.cantidad)) // Ordenar de mayor a menor
+                .slice(0, 5); // Obtener los primeros 5 productos
+            const blob = await pdf(<DetailsSalesBetter sales={top5Ventas} />).toBlob();
+            const url = URL.createObjectURL(blob);
+
+            window.open(url);
+
         } catch (error) {
-            showAlert('Error al crear Venta', 'error');
+            showAlert('Error al obtenre mejores ventas', 'error');
         }
     }
+
+    const detailsSaleGeneral = async () => {
+        const blob = await pdf(<DetailsSaleGeneral sales={sales} />).toBlob();
+        const url = URL.createObjectURL(blob);
+
+        // Abre el PDF en una nueva ventana o pestaña
+        window.open(url);
+    };
+    const detailsSalesBetter = async () => {
+        getProductsSales();
+    };
 
     return (
         <>
@@ -77,10 +95,19 @@ const SaleIndex = () => {
 
 
                     </div>
+                    <div className='flex gap-3'>
+
+                        <button onClick={detailsSaleGeneral} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
+                            <RiFilePdf2Line size={20} /> REPORTE GENERAL
+                        </button>
+                        <button onClick={detailsSalesBetter} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
+                            <RiFilePdf2Line size={20} /> MÁS VENDIDOS
+                        </button>
+                    </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                         <Link
                             to="/nueva-venta"
-                             className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
+                            className="flex items-center gap-3 bg-yellow-800 text-white hover:bg-yellow-900 transition-colors rounded-xl py-2 px-5"
                             size="sm"
                         >
                             <RiPushpinFill className="h-5 w-5" />
