@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 
 import {
@@ -7,13 +7,14 @@ import {
   RiLogoutCircleRLine,
 } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-// import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-// import "@szhsin/react-menu/dist/index.css";
-// import "@szhsin/react-menu/dist/transitions/slide.css";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import "@szhsin/react-menu/dist/index.css";
+import "@szhsin/react-menu/dist/transitions/slide.css";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('userAuth')));
   const navigate = useNavigate();
 
   const handleLogout = async() => {
@@ -21,18 +22,19 @@ const Header = () => {
     navigate('/login');
   };
 
+  console.log(user);
   return (
 
     <header className="sticky top-0 z-50 h-[4vh] md:h-[7vh] border-b border-secondary-100 p-8 flex items-center justify-end bg-gray-100">
       <nav className="flex items-center gap-2">
-        {/* <Menu
+        <Menu
           menuButton={
             <MenuButton className="flex items-center gap-x-2 p-2 rounded-lg transition-colors hover:bg-secondary-100 group">
               <img
                 src="https://static.vecteezy.com/system/resources/previews/028/238/588/non_2x/old-man-teacher-face-3d-profession-avatars-free-png.png"
                 className="w-6 h-6 object-cover rounded-full"
               />
-              <p className="text-gray-50">Test</p>
+              <p className="text-gray-500">Menu</p>
               <RiArrowDownSLine className="text-secondary-100 group-hover:text-black" />
             </MenuButton>
           }
@@ -51,19 +53,19 @@ const Header = () => {
                 src="https://static.vecteezy.com/system/resources/previews/028/238/588/non_2x/old-man-teacher-face-3d-profession-avatars-free-png.png"
                 className="w-8 h-8 object-cover rounded-full"
               />
-              <p>TEST</p>
+              <p>{user.nombre}</p>
 
             </Link>
           </MenuItem>
           <hr className="my-4 border-gray-500" />
-          <MenuItem className="p-0 hover:bg-transparent">
+          {/* <MenuItem className="p-0 hover:bg-transparent">
             <Link
               to="/perfil/configuracion"
               className="rounded-lg transition-colors  hover:bg-secondary-50 flex items-center gap-x-4 py-2 px-6 flex-1"
             >
               <RiSettings3Line /> Configuración
             </Link>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
               to="#"
@@ -73,7 +75,7 @@ const Header = () => {
               <RiLogoutCircleRLine /> Cerrar sesión
             </Link>
           </MenuItem>
-        </Menu> */}
+        </Menu>
       </nav>
     </header>
   );

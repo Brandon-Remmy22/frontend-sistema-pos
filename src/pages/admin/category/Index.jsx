@@ -96,7 +96,7 @@ const CategoryIndex = () => {
                             onClick={handleOpenCreateModal}
                         >
                             <RiAddLargeFill className="h-5 w-5" />
-                            <span className="font-semibold">Nuevo Categoria</span>
+                            <span className="font-semibold">Nueva Categoria</span>
                         </Button>
 
                     </div>
@@ -111,7 +111,7 @@ const CategoryIndex = () => {
                 <ModalForm
                     isOpen={isOpenCreateModal}
                     setIsOpen={setIsOpenCreateModal}
-                    title="Crear nuevo Categoria"
+                    title="Crear nueva Categoria"
                     icon={<RiUser3Fill className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
                     maxWidth='max-w-md'
                 >

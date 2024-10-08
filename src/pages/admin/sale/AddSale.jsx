@@ -59,7 +59,7 @@ const AddSale = () => {
                     options={options}
                     value={selectedClient}
                     onChange={handleClientChange}
-                    placeholder="Selecciona un rol"
+                    placeholder="Selecciona un cliente"
                     // error={errors.employee_id}
                     // isSearchable={true}
                     labelKey='nombre'

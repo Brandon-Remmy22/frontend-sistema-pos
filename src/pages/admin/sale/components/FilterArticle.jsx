@@ -16,13 +16,14 @@ import {
 import { addSale } from '../../../../redux/Sale/SaleSlice';
 import { getArticlesFetch, selectArticles } from '../../../../redux/Article/ArticleSlice';
 import ArticleTable from './table/ArticleTable';
-import { RiAddCircleLine } from 'react-icons/ri';
+import DialogInfo from '../../../../components/ui/DialogInfo';
 const TABLE_HEAD = ["#", "Nombre", "barra", ""];
 
 
 const FilterArticle = () => {
 
     const dispatch = useDispatch();
+    const [isOpenDialogInfo, setDialogInfo] = useState(false);
     const articles = useSelector(selectArticles);
     const status = useSelector((state) => state.article.status);
     const error = useSelector((state) => state.article.error);
@@ -45,8 +46,19 @@ const FilterArticle = () => {
 
 
     const addArticleShoppingCart = (article) => {
-        dispatch(addSale({cantidad:1, importe : 1*parseFloat(article.precio),...article}));
+
+        if (article.stock == 0) {
+            setDialogInfo(true);
+        } else {
+            dispatch(addSale({ cantidad: 1, importe: 1 * parseFloat(article.precio), ...article }));
+        }
+
+
     };
+
+    const handleClose = () => {
+        setDialogInfo(false);
+    }
     return (
         <>
             <div className=" ">
@@ -55,6 +67,14 @@ const FilterArticle = () => {
                 <ArticleTable articles={TABLE_ROWS} addArticle={addArticleShoppingCart}></ArticleTable>
 
 
+                <DialogInfo
+                    isOpen={isOpenDialogInfo}
+                    setIsOpen={setDialogInfo}
+                    title={'INVENTARIO VACIO'}
+                    description={'TU STOCK ESTA VACIO'}
+                    cancelButtonText="CERRAR"
+                    onCancel={handleClose}
+                />
             </div>
         </>
     );

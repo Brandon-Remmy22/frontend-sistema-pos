@@ -11,25 +11,32 @@ import {
 import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
-import { getSalesFetch } from '../../../../../redux/Sale/SaleSlice';
+import { getSalesFetch, updateSalesFilter } from '../../../../../redux/Sale/SaleSlice';
 
 
 const SaleTable = ({ sales }) => {
   const columns = [
     {
-      header: "num_documento",
+      header: "FOLIO",
       accessorKey: "num_documento",
     },
     {
-      header: "nombre_cliente",
+      header: "Nombre del cliente",
       accessorKey: "nombre_cliente",
     },
     {
-      header: "total",
-      accessorKey: "total",
+
+      header: "estado",
+      cell: ({ row }) => (
+        <div >{row.original.estado == 1 ? <p className='bg-green-300 text-center'>Aprobado</p> : <p className='bg-red-300 text-center'>Anulado</p>} </div>
+      ),
     },
     {
-      header: "Fecha",
+      header: "total Bs",
+      accessorKey: `total`,
+    },
+    {
+      header: "Fecha creación",
       accessorKey: "fechaCreacion",
     },
     {
@@ -46,11 +53,30 @@ const SaleTable = ({ sales }) => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [data, setData] = useState([]);
+
+  const filteredSales = sales.filter((sale) => {
+    const saleDate = new Date(sale.fechaCreacion);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return (
+      (!startDate || saleDate >= start) &&
+      (!endDate || saleDate <= end)
+    );
+  });
 
 
+  useEffect(() => {
+    // const data = filteredSales();
+    setData(filteredSales);
+    dispatch(updateSalesFilter(filteredSales));
+
+  }, [startDate, endDate])
 
   const [table, setTable] = useState(useReactTable({
-    data: sales, // Initially empty
+    data: data, // Initially empty
     columns,
     state: {
       columnFilters,
@@ -62,18 +88,33 @@ const SaleTable = ({ sales }) => {
     onGlobalFilterChange: setGlobalFilter,
   }));
   const updateClients = () => {
+    window.location.reload()
     dispatch(getSalesFetch());
   }
   return (
     <>
       <div>
-        <div className="mb-4">
+        <div className="mb-4 mt-5">
           <input
             type="text"
             value={globalFilter ?? ''}
             onChange={e => setGlobalFilter(e.target.value)}
             placeholder="Buscar..."
             className="border p-2 rounded w-full md:w-[200px]"
+            style={{ borderColor: '#93A8FF' }}
+          />
+          <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+            className="border p-2 rounded ml-5"
+            style={{ borderColor: '#93A8FF' }}
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+            className="border p-2 rounded ml-2"
             style={{ borderColor: '#93A8FF' }}
           />
         </div>

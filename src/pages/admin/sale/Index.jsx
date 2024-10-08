@@ -13,7 +13,7 @@ import ModalForm from '../../../components/ui/ModalForm';
 // import ClientForm from './components/ClientForm';
 
 
-import { getSalesFetch, selectSales } from '../../../redux/Sale/SaleSlice';
+import { getSalesFetch, selectSales, selectSalesReport, updateSalesFilter } from '../../../redux/Sale/SaleSlice';
 import { getProductsSalesBetter } from '../../../services/sale/saleService';
 import { AlertContext } from '../../../contexts/AlertContext';
 // import ClientTable from './components/table/ClientTable';
@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { pdf } from '@react-pdf/renderer';
 import DetailsSaleGeneral from './components/reports/DetailsSaleGeneral';
 import DetailsSalesBetter from './components/reports/DetailsSalesBetter';
-
+import { useAuth } from '../../../hooks/useAuth';
 
 const SaleIndex = () => {
 
@@ -31,11 +31,13 @@ const SaleIndex = () => {
     const [formErrors, setFormErrors] = useState({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const { showAlert } = useContext(AlertContext);
+    const { userRole } = useAuth();
 
 
 
 
     const sales = useSelector(selectSales);
+    const filteredSales = useSelector(selectSalesReport);
     const status = useSelector((state) => state.sale.status);
 
 
@@ -48,7 +50,8 @@ const SaleIndex = () => {
     useEffect(() => {
         if (status === 'succeeded') {
             setShowTable(true);
-            console.log(sales);
+            dispatch(updateSalesFilter(sales));
+            // console.log(sales);
         }
     }, [status, sales]);
 
@@ -62,7 +65,7 @@ const SaleIndex = () => {
             const data = await getProductsSalesBetter();
             const top5Ventas = data.ventas
                 .sort((a, b) => parseFloat(b.cantidad) - parseFloat(a.cantidad)) // Ordenar de mayor a menor
-                .slice(0, 5); // Obtener los primeros 5 productos
+                .slice(0, 5); 
             const blob = await pdf(<DetailsSalesBetter sales={top5Ventas} />).toBlob();
             const url = URL.createObjectURL(blob);
 
@@ -74,7 +77,7 @@ const SaleIndex = () => {
     }
 
     const detailsSaleGeneral = async () => {
-        const blob = await pdf(<DetailsSaleGeneral sales={sales} />).toBlob();
+        const blob = await pdf(<DetailsSaleGeneral sales={filteredSales} />).toBlob();
         const url = URL.createObjectURL(blob);
 
         // Abre el PDF en una nueva ventana o pestaña
@@ -96,13 +99,15 @@ const SaleIndex = () => {
 
                     </div>
                     <div className='flex gap-3'>
+                        {userRole === '1' && (<>
+                            <button onClick={detailsSaleGeneral} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
+                                <RiFilePdf2Line size={20} /> REPORTE GENERAL
+                            </button>
+                            <button onClick={detailsSalesBetter} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
+                                <RiFilePdf2Line size={20} /> MÁS VENDIDOS
+                            </button>
+                        </>)}
 
-                        <button onClick={detailsSaleGeneral} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
-                            <RiFilePdf2Line size={20} /> REPORTE GENERAL
-                        </button>
-                        <button onClick={detailsSalesBetter} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
-                            <RiFilePdf2Line size={20} /> MÁS VENDIDOS
-                        </button>
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                         <Link

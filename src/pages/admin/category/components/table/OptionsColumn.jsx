@@ -125,7 +125,7 @@ const OptionsColumn = ({ category, updateCategories }) => {
         description={
           `¿Está seguro que desea eliminar el categoria ${category.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
         }
-        confirmButtonText={`Sí, eliminar categorye`}
+        confirmButtonText={`Sí, eliminar categoria`}
         cancelButtonText="Cancelar"
         onConfirm={() => handleConfirm(category)}
         onCancel={handleCancel}

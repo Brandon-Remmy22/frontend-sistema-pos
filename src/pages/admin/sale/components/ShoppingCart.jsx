@@ -105,7 +105,7 @@ const ShooppingCart = () => {
             <div className='p-5 '>
                 <div>
                     <div className='p-5 border border-yellow-600 rounded-3xl'>
-                        <div className="grid grid-cols-6 bg-gray-100 py-4 gap-4">
+                        <div className="grid grid-cols-6 bg-gray-100 py-4 px-3 gap-4">
                             <div>ARTICULO</div>
                             <div>CANTIDAD</div>
                             <div>PRECIO</div>

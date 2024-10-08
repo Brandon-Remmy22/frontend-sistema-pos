@@ -19,6 +19,7 @@ export const saleSlice = createSlice({
     name: 'sales',
     initialState: {
         sales: [],
+        salesReport: [],
         salesShooppingCart: [],
         sale: {
         },
@@ -32,17 +33,20 @@ export const saleSlice = createSlice({
             const index = state.salesShooppingCart.findIndex(sale => sale.id === action.payload.id);
             if (index !== -1) {
                 console.log("action", action.payload);
-                state.salesShooppingCart[index] = {...action.payload, cantidad: parseFloat(action.payload.cantidad), precio: parseFloat(action.payload.precio), importe: parseFloat(action.payload.precio) * parseFloat(action.payload.cantidad)};
+                state.salesShooppingCart[index] = { ...action.payload, cantidad: parseFloat(action.payload.cantidad), precio: parseFloat(action.payload.precio), importe: parseFloat(action.payload.precio) * parseFloat(action.payload.cantidad) };
             }
         },
         clearSale: (state) => {
             state.sale = {};
         },
+        updateSalesFilter: (state, action) => {
+            state.salesReport = action.payload;
+        },
         addSale: (state, action) => {
             const index = state.salesShooppingCart.findIndex(sale => sale.id === action.payload.id);
             if (index !== -1) {
-              //  console.log(state.salesShooppingCart[index].cantidad + 1, action.payload.stock)
-                if (state.salesShooppingCart[index].cantidad + 1 < parseInt(action.payload.stock)) {
+                //  console.log(state.salesShooppingCart[index].cantidad + 1, action.payload.stock)
+                if (state.salesShooppingCart[index].cantidad + 1 <= parseInt(action.payload.stock)) {
                     state.salesShooppingCart[index].cantidad = parseFloat(state.salesShooppingCart[index].cantidad) + 1;
                     state.salesShooppingCart[index].importe = parseFloat(state.salesShooppingCart[index].cantidad) * parseFloat(state.salesShooppingCart[index].precio);
                 } else {
@@ -82,10 +86,11 @@ export const saleSlice = createSlice({
             });
     }
 });
-export const { updateSales, clearSale, addSale, removeSale } = saleSlice.actions;
+export const { updateSales, clearSale, addSale, removeSale, updateSalesFilter } = saleSlice.actions;
 
 export const selectSales = (state) => state.sale?.sales;
 export const selectSale = (state) => state.sale?.sale;
+export const selectSalesReport = (state) => state.sale?.salesReport;
 export const selectSalesShooppingCart = (state) => state.sale?.salesShooppingCart;
 
 export default saleSlice.reducer;

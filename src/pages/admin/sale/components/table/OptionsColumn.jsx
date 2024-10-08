@@ -6,6 +6,7 @@ import ModalForm from '../../../../../components/ui/ModalForm';
 import DialogDelete from '../../../../../components/ui/DialogDelete';
 import { AlertContext } from '../../../../../contexts/AlertContext';
 import { deleteClient, updateClient } from '../../../../../services/client/clientService';
+import { deleteSale } from '../../../../../services/sale/saleService';
 import DetailSale from './DetailsSale';
 
 import {
@@ -16,6 +17,8 @@ import {
   RiUserUnfollowLine,
   RiImageAddFill,
   RiInformation2Line,
+  RiForwardEndMiniFill,
+  RiCloseLine,
 } from 'react-icons/ri';
 
 import { pdf } from '@react-pdf/renderer'
@@ -37,8 +40,8 @@ const OptionsColumn = ({ client, updateClients }) => {
   const actionFunctions = {
     eliminar: async () => {
       try {
-        await deleteClient(client.id);
-        showAlert('venta eliminado correctamente', 'success');
+        await deleteSale(client.id);
+        showAlert('venta anulado correctamente', 'success');
         updateClients();
         setDialogDelete(false);
       } catch (error) {
@@ -95,10 +98,10 @@ const OptionsColumn = ({ client, updateClients }) => {
     console.log(client);
     const blob = await pdf(<DetailsSalePdf client={client} />).toBlob();
     const url = URL.createObjectURL(blob);
-  
+
     // Abre el PDF en una nueva ventana o pestaña
     window.open(url);
-};
+  };
   return (
     <>
       <Menu>
@@ -118,50 +121,41 @@ const OptionsColumn = ({ client, updateClients }) => {
 
             </button>
           </MenuItem>
-          {/* <MenuItem>
-            <button onClick={() => handleActionClick('eliminar')} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-
-              Eliminar
-
-            </button>
-          </MenuItem> */}
           <MenuItem>
-            
-              <button onClick={openPDFInNewWindow } className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-
-                Descargar PDF
-
-              </button>
-
-
+            <button onClick={openPDFInNewWindow} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              Descargar PDF
+            </button>
           </MenuItem>
-          <div className="my-1 h-px bg-white/5" />
 
-
+          <MenuItem>
+            <button onClick={handleActionClick} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              Anular Venta
+            </button>
+          </MenuItem>
         </MenuItems>
       </Menu>
       <DialogDelete
         user={client}
         isOpen={isOpenDialogEdit}
         setIsOpen={setDialogDelete}
-        title="Eliminar venta"
+        title="Anular venta"
         description={
-          `¿Está seguro que desea eliminar el venta ${client.nombre}? Esta acción es permanente y no se podrá deshacer. Todos los datos se eliminarán.`
+          `¿Está seguro que desea anular la venta? Esta acción es permanente y no se podrá deshacer.`
         }
-        confirmButtonText={`Sí, eliminar venta`}
+        confirmButtonText={`Sí, anular venta`}
         cancelButtonText="Cancelar"
         onConfirm={() => handleConfirm(client)}
         onCancel={handleCancel}
         confirmButtonColor={'bg-yellow-700'}
         cancelButtonColor="border-gray-400"
         icon={
-          <RiDeleteBin6Line className="w-10 h-10 flex items-center justify-center rounded-full text-red-500" />
+          <RiCloseLine className="w-10 h-10 flex items-center justify-center rounded-full text-red-500" />
         }
       />
       <ModalForm
         isOpen={isOpenModal}
         setIsOpen={setIsOpenModal}
-        title="Información de venta"
+        title="Información de la venta"
         icon={<RiInformation2Line className="w-6 h-6 flex items-center justify-center rounded-full text-gray-50" />}
       >
         <DetailSale

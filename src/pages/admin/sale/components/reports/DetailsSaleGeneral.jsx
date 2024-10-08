@@ -1,4 +1,4 @@
-import React,{ useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useEffect } from 'react';
 // Configura las fuentes personalizadas si es necesario
@@ -46,21 +46,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 10,
         textAlign: 'right',
-        fontSize:'15px',
-        
+        fontSize: '15px',
+
     },
     footer: {
         marginTop: 20,
     },
     title: {
-       fontSize:'18px'
+        fontSize: '18px'
+    },
+    aprobado:{
+        backgroundColor: '#86EFAC',
+
+    },
+    anulado:{
+        backgroundColor :'#FCA5A5'
     }
 });
 
 const DetailsSaleGeneral = ({ sales }) => {
 
     const totalImporte = useMemo(() => {
-        return sales.reduce((total, item) => total + parseFloat(item.total), 0);
+        return sales.reduce((total, item) => total + (item.estado == 1 ? parseFloat(item.total) : 0), 0);
     }, [sales]);
     return (
         <>
@@ -72,11 +79,12 @@ const DetailsSaleGeneral = ({ sales }) => {
                         <View>
                             <Text style={styles.title}>REPORTE GENERAL DE VENTAS</Text>
                         </View>
-                        {/* <View>
-                            <Text>NIT: 1230809123</Text>
-                            <Text>NOTA DE VENTA</Text>
-                            <Text>No.: 00000</Text>
-                        </View> */}
+                        <View>
+                            <Text>FECHA INICIO: {sales[0].fechaCreacion}</Text>
+                            <Text>FECHA FIN: {sales[sales.length-1].fechaCreacion}</Text>
+                            {/* <Text>NOTA DE VENTA</Text>
+                            <Text>No.: 00000</Text> */}
+                        </View>
                     </View>
 
                     <Text>Direccion: Avenida San Martín Esquina Heroínas</Text>
@@ -93,15 +101,17 @@ const DetailsSaleGeneral = ({ sales }) => {
                         <View style={styles.tableHeader}>
                             <Text style={[styles.tableCell, { flex: 0.5 }]}>N°</Text>
                             <Text style={styles.tableCell}>Cliente</Text>
+                            <Text style={styles.tableCell}>Estado</Text>
                             <Text style={styles.tableCell}>Fecha de venta</Text>
                             <Text style={styles.tableCell}>Serie</Text>
-                            <Text style={styles.tableCell}>total (Bs)</Text>
+                            <Text style={styles.tableCell}>Total (Bs)</Text>
                         </View>
 
                         {sales.map((sale, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
                                 <Text style={styles.tableCell}>{sale.nombre_cliente}</Text>
+                                <Text style={styles.tableCell}>{sale.estado == 1? <Text style={styles.aprobado}>Aprobado</Text>: <Text style={styles.anulado}>Anulado</Text>}</Text>
                                 <Text style={styles.tableCell}>{sale.fechaCreacion}</Text>
                                 <Text style={styles.tableCell}>0000{sale.id}</Text>
                                 <Text style={styles.tableCell}>{sale.total}</Text>

@@ -22,8 +22,8 @@ const DetailSale = ({
                 <div className="grid grid-cols-4 gap-5 my-4" key={product.precio + Math.random(123)}>
                     <div>{product.nombre_producto}</div>
                     <div>{product.cantidad}</div>
-                    <div>{product.precio}</div>
-                    <div>{product.importe}</div>
+                    <div>Bs {product.precio}</div>
+                    <div>Bs {product.importe}</div>
                 </div>
             ))}
         </div>

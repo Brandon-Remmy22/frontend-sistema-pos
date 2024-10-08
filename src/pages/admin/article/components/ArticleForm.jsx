@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
-import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
+import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line, RiFileTextLine, RiFontSize2, RiColorFilterLine, RiPriceTag3Line, RiStockLine, RiParagraph } from 'react-icons/ri';
 import { validateName } from '../../../../utils/validations';
 import CustomSelect from '../../../../components/ui/Select';
 import { getClientsFetch, selectClients } from '../../../../redux/Client/ClientSlice';
@@ -24,10 +24,19 @@ const ArticleForm = ({
 
 
   // const status = useSelector((state) => state.category.status);
-  const [errors, setErrors] = useState({ nombre: '', descripcion: '', precio: '', stock: '', codigo: '', img: '' });
-  const [formData, setFormData] = useState({ nombre: '', descripcion: '', precio: '', stock: '', codigo: '', img: '' });
+  const [errors, setErrors] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '' });
+  const [formData, setFormData] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sexo, setSexo] = useState([
+    {
+      label: 'VARON', value: { value: 1 }
+    },
+    {
+      label: 'MUJER', value: { value: 2 }
+    }
+  ]);
+  const [selectedSexo, setSelectedSexo] = useState(null);
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const clients = useSelector(selectClients);
@@ -93,9 +102,13 @@ const ArticleForm = ({
 
       if ((nombre && descripcion && precio && stock)) {
         if (isCreating == true) {
-          onSubmit({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id, codigo: "50" });
+
+
+          console.log({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id, sexo: selectedSexo.label, codigo: "50" });
+
+          onSubmit({ ...formData, img: selectedFile, id_categoria: selectedCategory.value.id, sexo: selectedSexo.label, codigo: "50" });
         } else {
-          onSubmit({ ...updatedFormData, img: selectedFile, id_categoria: selectedCategory.value.id, codigo: "50"  });
+          onSubmit({ ...updatedFormData, img: selectedFile, id_categoria: selectedCategory.value.id, sexo: selectedSexo.label, codigo: "50"  });
         }
       }
     }
@@ -105,6 +118,9 @@ const ArticleForm = ({
     if (article) {
       setSelectedCategory({
         label: article.categoria_nombre, value: { value: parseInt(article.id_categoria) }
+      });
+      setSelectedSexo({
+        label: article.sexo 
       });
       setFormData(article);
       setSelectedFile(article.img);
@@ -143,6 +159,10 @@ const ArticleForm = ({
   const handleCategoryChange = (option) => {
     setSelectedCategory(option);
   };
+
+  const handleSexohange = (option) => {
+    setSelectedSexo(option);
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className='mt-2'>
@@ -152,7 +172,7 @@ const ArticleForm = ({
           placeholder="Nombre del producto"
           value={formData.nombre}
           onChange={handleChange}
-          icon={RiUser2Line}
+          icon={RiParagraph}
           error={errors.nombre}
         />
       </div>
@@ -163,8 +183,41 @@ const ArticleForm = ({
           placeholder="Ingresa descripcion"
           value={formData.descripcion}
           onChange={handleChange}
-          icon={RiHome2Line}
+          icon={RiFileTextLine}
           error={errors.descripcion}
+        />
+      </div>
+      <div className='mt-2'>
+        <Input
+          label="talla"
+          id="talla"
+          placeholder="Ingresa talla"
+          value={formData.talla}
+          onChange={handleChange}
+          icon={RiFontSize2}
+          error={errors.talla}
+        />
+      </div>
+      <div className='mt-2'>
+        <CustomSelect
+          label="Sexo"
+          options={sexo}
+          value={selectedSexo}
+          onChange={handleSexohange}
+          placeholder="Selecciona una sexo"
+          isSearchable={true}
+          labelKey='label'
+        />
+      </div>
+      <div className='mt-2'>
+        <Input
+          label="color"
+          id="color"
+          placeholder="Ingresa color"
+          value={formData.color}
+          onChange={handleChange}
+          icon={RiColorFilterLine}
+          error={errors.color}
         />
       </div>
       <div className='mt-2'>
@@ -175,7 +228,7 @@ const ArticleForm = ({
           placeholder="Ingresa precio del articulo"
           value={formData.precio}
           onChange={handleChange}
-          icon={RiPhoneFindLine}
+          icon={RiPriceTag3Line}
           error={errors.precio}
         />
       </div>
@@ -187,7 +240,7 @@ const ArticleForm = ({
           placeholder="Ingresa el stock"
           value={formData.stock}
           onChange={handleChange}
-          icon={RiIndeterminateCircleLine}
+          icon={RiStockLine}
           error={errors.stock}
         />
       </div>
@@ -258,8 +311,8 @@ const ArticleForm = ({
             <p className='text-center'>
               <span className="text-primary">Haz Click para subir una imagen o arrastra una imagen</span>
             </p>
-            <p className="mt-1.5">Solo formato jpg y png</p>
-            <p>(2mb maximo)</p>
+            {/* <p className="mt-1.5">Solo formato jpg y png</p>
+            <p>(2mb maximo)</p> */}
           </div>
         </div>
 

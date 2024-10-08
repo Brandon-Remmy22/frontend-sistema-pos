@@ -32,6 +32,18 @@ const ArticleTable = ({ articles }) => {
       accessorKey: "precio",
     },
     {
+      header: "talla",
+      accessorKey: "talla",
+    },
+    {
+      header: "color",
+      accessorKey: "color",
+    },
+    {
+      header: "sexo",
+      accessorKey: "sexo",
+    },
+    {
       header: "stock",
       accessorKey: "stock",
     },
@@ -40,7 +52,7 @@ const ArticleTable = ({ articles }) => {
       accessorKey: "categoria_nombre",
     },
     {
-      header: "img",
+      header: "imagen",
       accessorKey: "img",
       cell: ({ row }) => (
         <img

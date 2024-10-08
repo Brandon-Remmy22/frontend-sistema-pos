@@ -101,14 +101,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             LEYDIS FASHION
           </h1>
           <ul className='p-3'>
-            <li className="group">
-              <Link
-                to=""
-                className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
-              >
-                <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Reportes
-              </Link>
-            </li>
+
+            {userRole === '1' && (
+              <li className="group">
+                <Link
+                  to=""
+                  className="flex text-secondary-100 items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-100 hover:text-black transition-colors"
+                >
+                  <RiDashboardLine className="text-primary text-xl group-hover:text-yellow-500" /> Reportes
+                </Link>
+              </li>
+            )}
             <li className="group">
               <Link
                 to="/ventas"
@@ -133,7 +136,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 >
                   <RiUser3Line className="text-primary text-xl group-hover:text-yellow-500" /> Usuarios
                 </Link>
-              </li>             
+              </li>
             )}
 
             <li className="group">
@@ -182,7 +185,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </ul>
               </li>
             )}
-    
+
           </ul>
         </div>
         <nav className="text-center p-5">

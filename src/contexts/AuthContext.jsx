@@ -19,7 +19,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('userRole', response.user.id_rol);
       setUserRole(response.user.id_rol);
       setIsAuthenticated(true);
-      navigate('/');
+
+      if (userRole === '1') {
+        navigate('/');
+      } else {
+        navigate('/ventas');
+      }
+
       return response;
     } catch (error) {
       return error;

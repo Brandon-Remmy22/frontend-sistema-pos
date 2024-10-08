@@ -103,7 +103,7 @@ const ClientForm = ({
         <Input
           label="Direccion"
           id="direccion"
-          placeholder="Ingresa direccion"
+          placeholder="Ingresa la dirección"
           value={formData.direccion}
           onChange={handleChange}
           icon={RiHome2Line}
@@ -114,7 +114,7 @@ const ClientForm = ({
         <Input
           label="Telefono"
           id="telefono"
-          placeholder="Ingresa telefono del articulo"
+          placeholder="Ingresa el telefono"
           value={formData.telefono}
           onChange={handleChange}
           icon={RiPhoneFindLine}

@@ -11,7 +11,7 @@ const CategoryForm = ({
   isEditing,          // Indica si se está editando un usuario
   onSubmit,           // Función para enviar el formulario
   onCancel,           // Función para cancelar la edición
-  confirmButtonText = isEditing ? 'Guardar cambios' : 'Crear categorye',  // Texto del botón de confirmación
+  confirmButtonText = isEditing ? 'Guardar cambios' : 'Crear categoria',  // Texto del botón de confirmación
   cancelButtonText = 'Cancelar',         // Texto del botón de cancelación
   confirmButtonColor = 'bg-yellow-700',    // Color del botón de confirmación
   cancelButtonColor = 'border-gray-400', // Color del botón de cancelación
@@ -85,7 +85,7 @@ const CategoryForm = ({
         <Input
           label="Nombre"
           id="nombre"
-          placeholder="Nombre del categorye"
+          placeholder="Nombre de la categoria"
           value={formData.nombre}
           onChange={handleChange}
           icon={RiUser2Line}
@@ -96,7 +96,7 @@ const CategoryForm = ({
         <Input
           label="descripcion"
           id="descripcion"
-          placeholder="Ingresa descripcion"
+          placeholder="Ingresa una descripción (opcional)"
           value={formData.descripcion}
           onChange={handleChange}
           icon={RiHome2Line}

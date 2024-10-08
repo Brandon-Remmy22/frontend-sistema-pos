@@ -86,9 +86,6 @@ const ArticleIndex = () => {
                             <RiAddLargeFill className="h-5 w-5" />
                             <span className="font-semibold">Nuevo Producto</span>
                         </Button></>)}
-
-
-
                     </div>
                 </div>
                 <div>
