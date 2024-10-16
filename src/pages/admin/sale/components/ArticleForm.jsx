@@ -30,18 +30,31 @@ const ArticleForm = ({
             setFormData(sale);
         }
     }, [isEditing, sale]);
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         let error = '';
-        setFormData({ ...formData, [name]: value });
+
+        if (name == "cantidad") {
+            if (value > 0 && value <= parseFloat(sale.stock)) {
+                console.log(sale);
+                setFormData({ ...formData, [name]: value });
+            }
+            console.log("vamo a revisar cantidad");
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
+
+
     };
 
     const handleSubmit = (e) => {
         // Evitar que el formulario recargue la página
         e.preventDefault();
-        setFormData({...formData, cantidad: parseInt(formData.cantidad)});
+        setFormData({ ...formData, cantidad: parseInt(formData.cantidad) });
         // setFormData({...formData, importe: 777});
-        console.log("update",formData);
+        console.log("update", formData);
         onSubmit(formData);
     };
 
