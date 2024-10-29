@@ -55,23 +55,17 @@ const ClientForm = ({
       const isCreating = !isEditing; // Determinar si se está creando un nuevo usuario
 
       if (isCreating) {
-        // Validaciones para crear un nuevo usuario
         if (!nombre) {
           setErrors((prevErrors) => ({ ...prevErrors, nombre: 'El nombre es requerido.' }));
-        }
-        if (!direccion) {
-          setErrors((prevErrors) => ({ ...prevErrors, direccion: 'La direccion es requerida.' }));
-        }
-        if (!telefono) {
-          setErrors((prevErrors) => ({ ...prevErrors, telefono: 'El telefono es requerido.' }));
         }
         if (!numDocumento) {
           setErrors((prevErrors) => ({ ...prevErrors, numDocumento: 'El carnet de indentidad es requerido.' }));
         }
       }
 
-      if ((nombre && direccion && telefono && numDocumento)) {
+      if ((nombre && numDocumento)) {
         if (isCreating == true) {
+          console.log(formData);
           onSubmit(formData);
         } else {
           onSubmit(updatedFormData);

@@ -21,8 +21,6 @@ const Header = () => {
     logout();
     navigate('/login');
   };
-
-  console.log(user);
   return (
 
     <header className="sticky top-0 z-50 h-[4vh] md:h-[7vh] border-b border-secondary-100 p-8 flex items-center justify-end bg-gray-100">
