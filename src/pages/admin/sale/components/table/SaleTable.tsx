@@ -14,7 +14,7 @@ import { AppDispatch } from './AppDispach';
 import { getSalesFetch, updateSalesFilter } from '../../../../../redux/Sale/SaleSlice';
 
 
-const SaleTable = ({ sales }) => {
+const SaleTable = ({ sales }) => {  
   const columns = [
     {
       header: "FOLIO",
@@ -23,6 +23,10 @@ const SaleTable = ({ sales }) => {
     {
       header: "Nombre del cliente",
       accessorKey: "nombre_cliente",
+    },
+    {
+      header: "carnet",
+      accessorKey: "ci",
     },
     {
 
@@ -50,6 +54,7 @@ const SaleTable = ({ sales }) => {
   ];
   const dispatch = useDispatch<AppDispatch>();
   const [globalFilter, setGlobalFilter] = useState('');
+  const [carnetFilter, setCarnetFilter] = useState('');
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -91,6 +96,13 @@ const SaleTable = ({ sales }) => {
     window.location.reload()
     dispatch(getSalesFetch());
   }
+
+  const handleCarnetFilterChange = (e) => {
+    const value = e.target.value;
+    setCarnetFilter(value);
+    setColumnFilters([{ id: 'ci', value }]); // Filtro específico
+  };
+
   return (
     <>
       <div>
@@ -102,6 +114,14 @@ const SaleTable = ({ sales }) => {
             placeholder="Buscar..."
             className="border p-2 rounded w-full md:w-[200px]"
             style={{ borderColor: '#93A8FF' }}
+          />
+          <input
+            type="text"
+            value={carnetFilter}
+            onChange={handleCarnetFilterChange}
+            placeholder="Buscar por Carnet..."
+            className="border p-2 rounded w-full md:w-[200px] ml-3"
+            style={{ borderColor: '#FFA8A8' }}
           />
           <input
             type="date"
@@ -207,7 +227,7 @@ const SaleTable = ({ sales }) => {
               table.setPageSize(Number(e.target.value))
             }}
           >
-            {[10, 20, 30, 40, 50, 60, 200].map(pageSize => (
+            {[7, 14, 30, 40, 50, 60, 200].map(pageSize => (
               <option key={pageSize} value={pageSize}>
                 Mostrar {pageSize}
               </option>

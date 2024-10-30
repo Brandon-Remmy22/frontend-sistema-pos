@@ -33,22 +33,10 @@ const Home = () => {
   const [reports, setReports] = useState({});
   const [ventasHoy, setVentasHoy] = useState(null);
 
-
-  // const sdsd = useMemo(() => {
-
-  //   if (ventasHoy.length  > 0) {
-  //     console.log("entro a memo");
-  //     return ventasHoy.reduce((total, item) => total + parseFloat(item.total_ventas), 0);
-  //   }
-  //   return []
-  // }, [ventasHoy]);
-
-  // useEffect(() => {
-  //   if (ventasHoy) {
-  //     console.log(ventasHoy[ventasHoy.length - 1].total_ventas);
-  //   }
-  // }, [ventasHoy]);
-
+  const [allData, setAllData] = useState([]); // Almacenar todos los datos sin filtrar
+  const [filteredData, setFilteredData] = useState([]); // Almacenar datos filtrados
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
 
   const actionFuctions = {
@@ -65,25 +53,31 @@ const Home = () => {
     getSalesBetter: async () => {
       try {
         const data = await getProductsSalesBetter();
-        const ventasAgrupadas = data.ventas.reduce((acc, venta) => {
-          const { producto_nombre, cantidad } = venta;
+        console.log(data);
+        setAllData(data.ventas); // Almacenar los datos completos
+        setFilteredData(data.ventas);
 
-          // Si el nombre del producto ya existe en el acumulador, suma las cantidades
-          if (acc[producto_nombre]) {
-            acc[producto_nombre].cantidad += parseFloat(cantidad);
-          } else {
-            // Si no existe, agrega el producto con su cantidad inicial
-            acc[producto_nombre] = { ...venta, cantidad: parseFloat(cantidad) };
-          }
 
-          return acc;
-        }, {});
 
-        // Convierte el objeto acumulado en un array y ordénalo de mayor a menor
-        const top5Ventas = Object.values(ventasAgrupadas)
-          .sort((a, b) => b.cantidad - a.cantidad) // Ordenar de mayor a menor
-          .slice(0, 5); // Tomar los 5 primeros
-        setData(top5Ventas);
+        // const ventasAgrupadas = data.ventas.reduce((acc, venta) => {
+        //   const { producto_nombre, cantidad } = venta;
+
+        //   // Si el nombre del producto ya existe en el acumulador, suma las cantidades
+        //   if (acc[producto_nombre]) {
+        //     acc[producto_nombre].cantidad += parseFloat(cantidad);
+        //   } else {
+        //     // Si no existe, agrega el producto con su cantidad inicial
+        //     acc[producto_nombre] = { ...venta, cantidad: parseFloat(cantidad) };
+        //   }
+
+        //   return acc;
+        // }, {});
+
+        // // Convierte el objeto acumulado en un array y ordénalo de mayor a menor
+        // const top5Ventas = Object.values(ventasAgrupadas)
+        //   .sort((a, b) => b.cantidad - a.cantidad) // Ordenar de mayor a menor
+        //   .slice(0, 5); // Tomar los 5 primeros
+        // setData(top5Ventas);
 
       } catch (error) {
         setReports({});
@@ -95,6 +89,47 @@ const Home = () => {
     actionFuctions.getReports();
     actionFuctions.getSalesBetter();
   }, []);
+
+  useEffect(() => {
+    const filterDataByDate = () => {
+        if (startDate && endDate) {
+            const filtered = allData.filter(venta => {
+                const fechaVenta = new Date(venta.fechaCreacion); // Asegúrate de que 'fecha' esté disponible en tus datos
+                return fechaVenta >= new Date(startDate) && fechaVenta <= new Date(endDate);
+            });
+            console.log(filtered);
+            setFilteredData(filtered);
+        } else {
+            setFilteredData(allData); // Si no hay fechas seleccionadas, mostrar todos los datos
+        }
+    };
+    filterDataByDate();
+}, [startDate, endDate, allData]);
+
+
+  // Calcular productos más vendidos de los datos filtrados
+  const calculateTopProducts = () => {
+    const ventasAgrupadas = filteredData.reduce((acc, venta) => {
+      const { producto_nombre, cantidad } = venta;
+
+      // Si el nombre del producto ya existe en el acumulador, suma las cantidades
+      if (acc[producto_nombre]) {
+        acc[producto_nombre].cantidad += parseFloat(cantidad);
+      } else {
+        // Si no existe, agrega el producto con su cantidad inicial
+        acc[producto_nombre] = { producto_nombre, cantidad: parseFloat(cantidad) };
+      }
+
+      return acc;
+    }, {});
+
+    // Convierte el objeto acumulado en un array y ordénalo de mayor a menor
+    return Object.values(ventasAgrupadas)
+      .sort((a, b) => b.cantidad - a.cantidad) // Ordenar de mayor a menor
+      .slice(0, 5); // Tomar los 5 primeros
+  };
+
+  const topProducts = calculateTopProducts(); // Calcular productos más vendidos
 
 
   if (!reports) {
@@ -113,7 +148,7 @@ const Home = () => {
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row items-center text-lg">
           <RiMoneyDollarCircleLine size={37} color="green" />
-          <div>TOTAL PAGOS: <strong>{reports.total_ventas}</strong> Bs</div>
+          <div>VENTAS TOTALES: <strong>{reports.total_ventas}</strong> Bs</div>
 
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row items-center text-lg">
@@ -133,9 +168,23 @@ const Home = () => {
             </div>
             <div className="p-7">
               Productos mas vendidos
+              <input
+          type="date"
+          value={startDate}
+          onChange={e => setStartDate(e.target.value)}
+          className="border p-2 rounded ml-5"
+          style={{ borderColor: '#93A8FF' }}
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={e => setEndDate(e.target.value)}
+          className="border p-2 rounded ml-2"
+          style={{ borderColor: '#93A8FF' }}
+        />
               <ResponsiveContainer width="100%" height={350} aspect={2}>
                 <BarChart
-                  data={data}
+                  data={topProducts}
                   margin={{
                     top: 5,
                     right: 10,
@@ -149,7 +198,7 @@ const Home = () => {
 
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="cantidad" fill="#E5E7EB" />
+                  <Bar dataKey="cantidad" fill="#209020" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

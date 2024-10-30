@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-
 import {
   useReactTable,
   ColumnFiltersState,
@@ -8,15 +7,12 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import OptionsColumn from './OptionsColumn';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from './AppDispach';
-import { getClientsFetch } from '../../../../../redux/Client/ClientSlice';
-import { useAuth } from '../../../../../hooks/useAuth';
-
-
-const ClientTable = ({ clients }) => {
-  const { userRole } = useAuth();
+import debounce from 'lodash/debounce';
+import { selectClient } from '../../../../redux/Client/ClientSlice';
+import { useSelector } from 'react-redux';
+import { getClients, getClientsSearch } from '../../../../services/client/clientService';
+import { RiAddCircleLine, RiCircleLine } from 'react-icons/ri';
+const FilterClient = ({ addClient }) => {
   const columns = [
     {
       header: "Nombre",
@@ -35,27 +31,27 @@ const ClientTable = ({ clients }) => {
       accessorKey: "numDocumento",
     },
     {
-      header: "Creacion",
-      accessorKey: "fechaCreacion",
-    },
-    {
       id: 'actions',
       header: 'Acciones',
       cell: ({ row }) => (
-        <OptionsColumn client={row.original} updateClients={updateClients} />
+        <button onClick={() => addClient(row.original)}><RiAddCircleLine color='green' size={23}></RiAddCircleLine></button>
       ),
     },
 
   ];
-  const dispatch = useDispatch<AppDispatch>();
+  const client = useSelector(selectClient);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false); // Indicador de carga
+  const [articulos, setArticulos] = useState([]); // Datos traídos del backend
+  const [selectedRowIndex, setSelectedRowIndex] = useState(0);
   const [globalFilter, setGlobalFilter] = useState('');
-  const [carnetFilter, setCarnetFilter] = useState('');
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
 
+
   const [table, setTable] = useState(useReactTable({
-    data: clients, // Initially empty
+    data: articulos, // Initially empty
     columns,
     state: {
       columnFilters,
@@ -67,38 +63,62 @@ const ClientTable = ({ clients }) => {
     onGlobalFilterChange: setGlobalFilter,
   }));
 
-  const handleCarnetFilterChange = (e) => {
-    const value = e.target.value;
-    setCarnetFilter(value);
-    setColumnFilters([{ id: 'numDocumento', value }]); // Filtro específico
+
+  // Función para hacer la petición al backend
+  const fetchArticles = async (term: null) => {
+    if (!term) return; // No hacer nada si no hay término de búsqueda
+
+    setLoading(true);
+    try {
+      const response = await getClientsSearch(term);
+      setArticulos(response);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    } finally {
+      setLoading(false);
+    }
   };
-  const updateClients = () => {
-    dispatch(getClientsFetch());
-  }
+
+
+  const handleSearchChange = useCallback(
+    (e: any) => {
+      const value = e.target.value;
+      setSearchTerm(value);
+    },
+    [setSearchTerm]
+  );
+
+  // Usamos debounce para evitar peticiones innecesarias
+  const debouncedFetch = useCallback(
+    debounce((term: any) => {
+      fetchArticles(term);
+    }, 700), // Espera de 500ms después de dejar de escribir
+    []
+  );
+
+  useEffect(() => {
+    if (searchTerm) {
+      debouncedFetch(searchTerm ? `${searchTerm}` : null);
+    } else {
+      setArticulos([]); // Vaciar artículos si no hay término de búsqueda
+    }
+  }, [searchTerm, debouncedFetch]);
+
   return (
     <>
       <div>
-        <div className='flex gap-3'>
-          <div className="mb-4">
+        <div className='flex justify-between'>
+          <div>
             <input
               type="text"
-              value={globalFilter ?? ''}
-              onChange={e => setGlobalFilter(e.target.value)}
-              placeholder="Buscar..."
-              className="border p-2 rounded w-full md:w-[200px]"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              placeholder="Buscar cliente..."
+              className="border p-2 rounded w-full md:w-[200px] mb-2"
               style={{ borderColor: '#93A8FF' }}
             />
           </div>
-          <div className="mb-4">
-            <input
-              type="text"
-              value={carnetFilter}
-              onChange={handleCarnetFilterChange}
-              placeholder="Buscar por Carnet..."
-              className="border p-2 rounded w-full md:w-[200px]"
-              style={{ borderColor: '#FFA8A8' }}
-            />
-          </div>
+          <div className='text-4xl'>{client ? client.nombre : 'SIN CLIENTE'}</div>
         </div>
         <div className="table-content overflow-y-auto custom-scrollbar">
           <table className='min-w-full leading-normal'>
@@ -116,10 +136,12 @@ const ClientTable = ({ clients }) => {
               ))}
             </thead>
             <tbody className='text-gray-700 text-md bg-white'>
-              {table.getRowModel().rows.map(row => (
-
-                <tr className="border-b border-gray-200 hover:bg-gray-100 group"
-                  style={{ minHeight: '50px' }} key={row.id}>
+              {table.getRowModel().rows.map((row, index) => (
+                <tr className={`border-b border-gray-200 hover:bg-gray-100 group ${selectedRowIndex === index ? 'bg-blue-100' : ''
+                  }`}
+                  style={{ minHeight: '50px' }} key={row.id}
+                  onClick={() => setSelectedRowIndex(index)}
+                >
                   {
                     row.getVisibleCells().map(cell => (
                       <td className="py-4 px-6 text-left text-sm group-hover:bg-gray-100"
@@ -202,4 +224,4 @@ const ClientTable = ({ clients }) => {
 }
 
 
-export default ClientTable;
+export default FilterClient;

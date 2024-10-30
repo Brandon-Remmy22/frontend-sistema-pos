@@ -9,7 +9,16 @@ const getClients = async () => {
     }
 }
 
-const getClient = async ( alrticleId ) => {
+const getClientsSearch = async (buscar = null) => {
+    try {
+        const response = await AxiosInstance.get(buscar == null ? '/cliente-search' : `/cliente-search?buscar=${buscar}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getClient = async (alrticleId) => {
     try {
         const response = await AxiosInstance.get(`/cliente/${clientId}`);
         return response.data;
@@ -46,4 +55,4 @@ const deleteClient = async (clientId) => {
     }
 }
 
-export { getClients, getClient, createClient, updateClient, deleteClient};
+export { getClients, getClientsSearch, getClient, createClient, updateClient, deleteClient };

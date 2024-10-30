@@ -75,24 +75,28 @@ const ShooppingCart = () => {
         const data = {
             total: totalSales,
             descuento: '0',
-            igv:'0',
-            id_cliente: client? client.value.id : null,
+            igv: '0',
+            id_cliente: client ? client.id : null,
             id_usuario: user.id,
             id_comprobante: 1,
             serie: "93784722",
             num_documento: "0000001",
-            subtotal:"5467",
+            subtotal: "5467",
             cantidades,
             precios,
             importes,
             productos
         }
         try {
-            await createSale(data);
+            if (data.id_cliente != null) {
+                await createSale(data);
+                showAlert('venta creada correctamente', 'success');
+                setIsOpenEditModal(false);
+                window.location.reload()
+            }else{
+                showAlert('Error al crear venta', 'error');
+            }
 
-            showAlert('venta creada correctamente', 'success');
-            setIsOpenEditModal(false);
-            window.location.reload()
 
         } catch (error) {
             showAlert('Error al crear venta', 'error');

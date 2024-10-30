@@ -17,6 +17,16 @@ const getProductsSalesBetter = async () => {
 
     }
 }
+
+const getSalesForClient = async (id) => {
+    try {
+        const response = await AxiosInstance.get(`/ventas/cliente/${id}`);
+        return response.data;
+    } catch (error) {
+
+    }
+}
+
 const getSales = async () => {
     try {
         const response = await AxiosInstance.get('/venta');
@@ -63,4 +73,4 @@ const deleteSale = async (id) => {
     }
 }
 
-export { getSales, getSale, createSale, updateSale, deleteSale, getReports, getProductsSalesBetter };
+export { getSales, getSalesForClient, getSale, createSale, updateSale, deleteSale, getReports, getProductsSalesBetter };

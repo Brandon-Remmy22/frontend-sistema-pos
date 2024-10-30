@@ -7,7 +7,10 @@ import DialogDelete from '../../../../../components/ui/DialogDelete';
 import { AlertContext } from '../../../../../contexts/AlertContext';
 import { deleteClient, updateClient } from '../../../../../services/client/clientService';
 import ClientForm from '../ClientForm';
-
+import { getSalesForClient } from '../../../../../services/sale/saleService';
+import { pdf } from '@react-pdf/renderer'
+import DialogInfo from '../../../../../components/ui/DialogInfo';
+import SalesClientReport from '../reports/SalesClient';
 import {
   RiMore2Fill,
   RiUserLine,
@@ -28,6 +31,7 @@ const OptionsColumn = ({ client, updateClients }) => {
   const [isOpenImageModal, setIsOpenImageModal] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const { showAlert } = useContext(AlertContext);
+  const [isOpenDialogInfo, setDialogInfo] = useState(false);
   const [action, setAction] = useState('');
   // Efecto para limpiar los errores del formulario al cerrar el modal
   const actionFunctions = {
@@ -86,11 +90,28 @@ const OptionsColumn = ({ client, updateClients }) => {
     setDialogDelete(true);
     // setAction(actionType);
   };
+
+  const openPDFInNewWindow = async () => {
+
+    try {
+      const response = await getSalesForClient(client.id);
+      console.log(response);
+      const blob = await pdf(<SalesClientReport sales={response} client={client} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    } catch (error) {
+      setDialogInfo(true);
+    }
+  };
+
+  const handleClose = () => {
+    setDialogInfo(false);
+  }
   return (
     <>
       <Menu>
         <MenuButton className="inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none   data-[focus]:outline-1 data-[focus]:outline-white">
-         <RiMore2Fill size={18} className='font-bold text-gray-500' />
+          <RiMore2Fill size={18} className='font-bold text-gray-500' />
         </MenuButton>
 
         <MenuItems
@@ -102,14 +123,21 @@ const OptionsColumn = ({ client, updateClients }) => {
             <button onClick={handleEditClick} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
 
               Editar
-              
+
             </button>
           </MenuItem>
           <MenuItem>
             <button onClick={() => handleActionClick('eliminar')} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
 
               Eliminar
-              
+
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button onClick={openPDFInNewWindow} className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+
+              Reporte compras
+
             </button>
           </MenuItem>
           <div className="my-1 h-px bg-white/5" />
@@ -147,9 +175,16 @@ const OptionsColumn = ({ client, updateClients }) => {
           onSubmit={handleConfirmEdit}
           onCancel={handleCancelEdit}
           formErrors={formErrors}
-        /> 
+        />
       </ModalForm>
-
+      <DialogInfo
+        isOpen={isOpenDialogInfo}
+        setIsOpen={setDialogInfo}
+        title={'INFO'}
+        description={'EL CLIENTE NO TIENE NINGUNA COMPRA REALIZADA'}
+        cancelButtonText="CERRAR"
+        onCancel={handleClose}
+      />
     </>
   );
 };

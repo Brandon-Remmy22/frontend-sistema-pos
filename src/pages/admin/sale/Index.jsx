@@ -33,8 +33,10 @@ const SaleIndex = () => {
     const { showAlert } = useContext(AlertContext);
     const { userRole } = useAuth();
 
-
-
+    const [allData, setAllData] = useState([]); // Almacenar todos los datos sin filtrar
+    const [filteredData, setFilteredData] = useState([]); // Almacenar datos filtrados
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const sales = useSelector(selectSales);
     const filteredSales = useSelector(selectSalesReport);

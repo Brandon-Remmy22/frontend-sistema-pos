@@ -18,7 +18,7 @@ import FilterArticle from './components/FilterArticle';
 import CustomSelect from '../../../components/ui/Select';
 
 import { getClientsFetch, selectClients, selectedClientRedux } from '../../../redux/Client/ClientSlice';
-
+import FilterClient from './components/FilterClient';
 
 const AddSale = () => {
 
@@ -51,10 +51,15 @@ const AddSale = () => {
         }
     }, [status, clients]);
 
+
+    const addClient = ( client )=>{
+        setSelectedClient(client);
+        dispatch(selectedClientRedux(client));
+    }
     return (
         <Card className='min-h-[calc(100vh-12vh)] flex flex-col  rounded-md p-5 shadow-md '>
             <div>
-                <CustomSelect
+                {/* <CustomSelect
                     label="Elegir cliente"
                     options={options}
                     value={selectedClient}
@@ -63,8 +68,9 @@ const AddSale = () => {
                     // error={errors.employee_id}
                     // isSearchable={true}
                     labelKey='nombre'
-                />
-                <div className="mb-2 mt-2 flex items-center justify-between gap-8">
+                /> */}
+                <FilterClient addClient={addClient} />
+                <div className="mb-2 mt-4 flex items-center justify-between gap-8">
                     <div>
                         <Typography variant="h5" color="blue-gray" className="font-semibold">
                             Elegir producto

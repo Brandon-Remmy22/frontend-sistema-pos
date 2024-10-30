@@ -18,7 +18,7 @@ import { createClient } from '../../../services/client/clientService';
 import { AlertContext } from '../../../contexts/AlertContext';
 import ClientTable from './components/table/ClientTable';
 import { useAuth } from '../../../hooks/useAuth';
-
+import DialogInfo from '../../../components/ui/DialogInfo';
 
 
 const ClientIndex = () => {
@@ -28,7 +28,7 @@ const ClientIndex = () => {
     const [formErrors, setFormErrors] = useState({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const { showAlert } = useContext(AlertContext);
-    const { userRole } = useAuth();
+    const [isOpenDialogInfo, setDialogInfo] = useState(false);
 
 
     const clients = useSelector(selectClients);
@@ -61,7 +61,13 @@ const ClientIndex = () => {
             dispatch(getClientsFetch());
         } catch (error) {
             showAlert('Error al crear Cliente', 'error');
+            setIsOpenCreateModal(false);
+            setDialogInfo(true);
         }
+    }
+
+    const handleClose = () => {
+        setDialogInfo(false);
     }
 
     return (
@@ -110,7 +116,14 @@ const ClientIndex = () => {
                     />
                 </ModalForm>
             </CardHeader>
-
+            <DialogInfo
+                    isOpen={isOpenDialogInfo}
+                    setIsOpen={setDialogInfo}
+                    title={'ERROR'}
+                    description={'EL CLIENTE YA EXISTE'}
+                    cancelButtonText="CERRAR"
+                    onCancel={handleClose}
+                />
         </>
     );
 }
