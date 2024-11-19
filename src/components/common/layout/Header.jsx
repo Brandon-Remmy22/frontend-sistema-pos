@@ -25,6 +25,7 @@ const Header = () => {
 
     <header className="sticky top-0 z-50 h-[4vh] md:h-[7vh] border-b border-secondary-100 p-8 flex items-center justify-end bg-gray-100">
       <nav className="flex items-center gap-2">
+        <div className="font-bold">{user? (user.rol_nombre).toUpperCase():'SIN ROL'}</div>
         <Menu
           menuButton={
             <MenuButton className="flex items-center gap-x-2 p-2 rounded-lg transition-colors hover:bg-secondary-100 group">

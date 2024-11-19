@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
-import { validateName } from '../../../../utils/validations';
+import { validateName, validateNameWithNumbers, validateOnlyNumbers } from '../../../../utils/validations';
 
 
 // Componente para el formulario de creación y edición de usuarios
@@ -26,14 +26,23 @@ const CategoryForm = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = ''
-    // if (name === 'nombre') {
-    //   const ciError = validateName(value);
-    //   if (ciError) {
-    //     error = ciError;
-    //   } else {
-    //     error = '';
-    //   }
-    // }
+    if (name === 'nombre') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+
+    if (name === 'descripcion') {
+      const ciError = validateNameWithNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
     setErrors({ ...errors, [name]: error });
     setFormData({ ...formData, [name]: value });
   };

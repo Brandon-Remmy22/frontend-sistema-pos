@@ -11,7 +11,7 @@ import {
 import OptionsColumn from './OptionsColumn';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './AppDispach';
-import { getSalesFetch, updateSalesFilter } from '../../../../../redux/Sale/SaleSlice';
+import { getSalesFetch, updateEndDate, updateSalesFilter, updateStartDate } from '../../../../../redux/Sale/SaleSlice';
 
 
 const SaleTable = ({ sales }) => {  
@@ -77,7 +77,6 @@ const SaleTable = ({ sales }) => {
     // const data = filteredSales();
     setData(filteredSales);
     dispatch(updateSalesFilter(filteredSales));
-
   }, [startDate, endDate])
 
   const [table, setTable] = useState(useReactTable({
@@ -102,6 +101,17 @@ const SaleTable = ({ sales }) => {
     setCarnetFilter(value);
     setColumnFilters([{ id: 'ci', value }]); // Filtro específico
   };
+
+
+  useEffect(()=>{
+
+    dispatch(updateStartDate(startDate));
+  },[startDate])
+
+  useEffect(()=>{
+
+    dispatch(updateEndDate(endDate));
+  },[endDate])
 
   return (
     <>

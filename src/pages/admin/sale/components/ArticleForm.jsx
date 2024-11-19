@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine } from 'react-icons/ri';
+import { validateName } from '../../../../utils/validations';
 
 
 
@@ -24,6 +25,7 @@ const ArticleForm = ({
         precio: '',
         importe: ''
     });
+    const [errors, setErrors] = useState({ nombre: '' });
 
     useEffect(() => {
         if (isEditing && sale) {
@@ -36,6 +38,15 @@ const ArticleForm = ({
         const { name, value } = e.target;
         let error = '';
 
+        if (name === 'nombre') {
+            const ciError = validateName(value);
+            if (ciError) {
+                error = ciError;
+            } else {
+                error = '';
+            }
+        }
+
         if (name == "cantidad") {
             if (value > 0 && value <= parseFloat(sale.stock)) {
                 console.log(sale);
@@ -43,6 +54,7 @@ const ArticleForm = ({
             }
             console.log("vamo a revisar cantidad");
         } else {
+            setErrors({ ...errors, [name]: error });
             setFormData({ ...formData, [name]: value });
         }
 
@@ -52,10 +64,18 @@ const ArticleForm = ({
     const handleSubmit = (e) => {
         // Evitar que el formulario recargue la página
         e.preventDefault();
-        setFormData({ ...formData, cantidad: parseInt(formData.cantidad) });
-        // setFormData({...formData, importe: 777});
-        console.log("update", formData);
-        onSubmit(formData);
+        const hasErrors = Object.values(errors).some((error) => error !== '');
+        if (!hasErrors) {
+            if (!nombre) {
+                setErrors((prevErrors) => ({ ...prevErrors, nombre: 'El nombre es requerido.' }));
+            }
+            if ((nombre)) {
+                 setFormData({ ...formData, cantidad: parseInt(formData.cantidad) });
+                 onSubmit(formData);
+            }
+
+        }
+
     };
 
 
@@ -70,18 +90,20 @@ const ArticleForm = ({
                     value={formData.nombre}
                     onChange={handleChange}
                     icon={RiPushpinLine}
-
+                    error={errors.nombre}
                 />
             </div>
             <div className='mt-2'>
                 <Input
-                    label="Nombre del precio"
+                    label="Precio"
                     id="precio"
+                    type='number'
+                    enable="true"
                     placeholder="Ingresa precio del articulo"
                     value={formData.precio}
                     onChange={handleChange}
                     icon={RiPushpinLine}
-
+                    disabled={true}
                 />
             </div>
             <div className='mt-2'>
@@ -93,7 +115,6 @@ const ArticleForm = ({
                     value={formData.cantidad}
                     onChange={handleChange}
                     icon={RiPushpinLine}
-
                 />
             </div>
             <div className="mt-6 flex items-center gap-x-2">

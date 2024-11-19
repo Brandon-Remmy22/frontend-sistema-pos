@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
-import { validateName } from '../../../../utils/validations';
+import { validateName, validateNameWithNumbers, validateOnlyNumbers } from '../../../../utils/validations';
 
 
 // Componente para el formulario de creación y edición de usuarios
@@ -27,14 +27,38 @@ const ClientForm = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = '';
-    // if (name === 'nombre') {
-    //   const ciError = validateName(value);
-    //   if (ciError) {
-    //     error = ciError;
-    //   } else {
-    //     error = '';
-    //   }
-    // }
+    if (name === 'nombre') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'direccion') {
+      const ciError = validateNameWithNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'telefono') {
+      const ciError = validateOnlyNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'numDocumento') {
+      const ciError = validateNameWithNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
     setErrors({ ...errors, [name]: error });
     setFormData({ ...formData, [name]: value });
   };
@@ -57,6 +81,12 @@ const ClientForm = ({
       if (isCreating) {
         if (!nombre) {
           setErrors((prevErrors) => ({ ...prevErrors, nombre: 'El nombre es requerido.' }));
+        }
+        if (!direccion) {
+          setErrors((prevErrors) => ({ ...prevErrors, direccion: 'La dirección es requerido.' }));
+        }
+        if (!telefono) {
+          setErrors((prevErrors) => ({ ...prevErrors, telefono: 'El número de telefono es requerido.' }));
         }
         if (!numDocumento) {
           setErrors((prevErrors) => ({ ...prevErrors, numDocumento: 'El carnet de indentidad es requerido.' }));
@@ -108,6 +138,7 @@ const ClientForm = ({
         <Input
           label="Telefono"
           id="telefono"
+          type='number'
           placeholder="Ingresa el telefono"
           value={formData.telefono}
           onChange={handleChange}

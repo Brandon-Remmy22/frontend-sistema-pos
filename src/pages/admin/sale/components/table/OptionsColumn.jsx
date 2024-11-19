@@ -50,7 +50,6 @@ const OptionsColumn = ({ client, updateClients }) => {
     },
     editar: async (formData) => {
       try {
-        // Obtener los datos del formulario
         const { nombre, id } = formData;
         await updateClient(formData, id);
         updateClients();

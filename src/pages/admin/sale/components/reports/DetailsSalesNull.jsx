@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
-import { useEffect } from 'react';
+
 // Configura las fuentes personalizadas si es necesario
 // Font.register({ family: 'Helvetica-Bold', src: 'https://path-to-your-font-file.ttf' });
 
@@ -64,11 +64,17 @@ const styles = StyleSheet.create({
     }
 });
 
-const DetailsSaleGeneral = ({ sales, start, end }) => {
+const DetailsSalesNull = ({ sales, start, end }) => {
+
+    const [data, setData] = useState([]);
+    const ventasAnuladas = sales.filter(venta => venta.estado === "0");
 
     const totalImporte = useMemo(() => {
         return sales.reduce((total, item) => total + (item.estado == 1 ? parseFloat(item.total) : 0), 0);
     }, [sales]);
+    useEffect(() => {
+        setData(ventasAnuladas);
+    },[]);
     return (
         <>
             <Document>
@@ -77,7 +83,7 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                     <View style={styles.header}>
                         {/* <Image style={styles.logo} src="/logo.png" /> */}
                         <View>
-                            <Text style={styles.title}>REPORTE GENERAL DE VENTAS</Text>
+                            <Text style={styles.title}>REPORTE VENTAS ANULADAS</Text>
                         </View>
                         <View>
                             <Text>FECHA INICIO: {start == '' ? 'Buscar en todo' : start}</Text>
@@ -107,7 +113,7 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                             <Text style={styles.tableCell}>Total (Bs)</Text>
                         </View>
 
-                        {sales.map((sale, index) => (
+                        {data.map((sale, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
                                 <Text style={styles.tableCell}>{sale.nombre_cliente}</Text>
@@ -133,4 +139,4 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
     )
 }
 
-export default DetailsSaleGeneral;
+export default DetailsSalesNull;

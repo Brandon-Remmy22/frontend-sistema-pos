@@ -18,6 +18,8 @@ export const getSaleFetch = createAsyncThunk(
 export const saleSlice = createSlice({
     name: 'sales',
     initialState: {
+        startDate: '',
+        endDate: '',
         sales: [],
         salesReport: [],
         salesShooppingCart: [],
@@ -38,6 +40,12 @@ export const saleSlice = createSlice({
         },
         clearSale: (state) => {
             state.sale = {};
+        },
+        updateStartDate: (state, action) => {
+            state.startDate = action.payload;
+        },
+        updateEndDate: (state, action) => {
+            state.endDate = action.payload;
         },
         updateSalesFilter: (state, action) => {
             state.salesReport = action.payload;
@@ -86,10 +94,12 @@ export const saleSlice = createSlice({
             });
     }
 });
-export const { updateSales, clearSale, addSale, removeSale, updateSalesFilter } = saleSlice.actions;
+export const { updateSales, clearSale, addSale, removeSale, updateSalesFilter, updateStartDate, updateEndDate } = saleSlice.actions;
 
 export const selectSales = (state) => state.sale?.sales;
 export const selectSale = (state) => state.sale?.sale;
+export const selectStartDate = (state) => state.sale?.startDate;
+export const selectEndDate = (state) => state.sale?.endDate;
 export const selectSalesReport = (state) => state.sale?.salesReport;
 export const selectSalesShooppingCart = (state) => state.sale?.salesShooppingCart;
 

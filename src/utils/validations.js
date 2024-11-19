@@ -29,14 +29,30 @@ export const validateName = (name) => {
 
   // Verificar si cumple con la expresión regular (solo letras y espacios)
   if (!nameRegex.test(name)) {
-    return 'El nombre solo puede contener letras y espacios.';
+    return 'Solo puede contener letras y espacios.';
   }
 
   // Si pasa todas las validaciones, retornar null (sin errores)
   return null;
 };
 
+export const validateNameWithNumbers = (input) => {
+  // Verificar si el campo está vacío
+  if (!input.trim()) {
+    return 'Por favor, ingresa un valor.';
+  }
 
+  // Expresión regular para permitir letras, números y espacios
+  const alphanumericRegex = /^[a-zA-Z0-9\s]+$/;
+
+  // Verificar si cumple con la expresión regular
+  if (!alphanumericRegex.test(input)) {
+    return 'El valor solo puede contener letras, números y espacios.';
+  }
+
+  // Si pasa todas las validaciones, retornar null (sin errores)
+  return null;
+};
 
 // Expresión regular para validar números de teléfono móvil en Ecuador
 const mobilePhoneRegex = /^(?:\+591|0)9\d{8}$/;
@@ -56,4 +72,20 @@ export const validateMobilePhone = (phone) => {
 };
 
 
+export const validateOnlyNumbers = (input) => {
+  // Verificar si el campo está vacío
+  if (!input.trim()) {
+    return 'Por favor, ingresa un valor.';
+  }
 
+  // Expresión regular para permitir solo números
+  const numericRegex = /^[0-9]+$/;
+
+  // Verificar si cumple con la expresión regular
+  if (!numericRegex.test(input)) {
+    return 'El valor solo puede contener números.';
+  }
+
+  // Si pasa todas las validaciones, retornar null (sin errores)
+  return null;
+};

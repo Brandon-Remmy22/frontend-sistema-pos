@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line } from 'react-icons/ri';
 import { Select, Option } from "@material-tailwind/react";
-import { validateName } from '../../../../utils/validations';
+import { validateName, validateNameWithNumbers, validateOnlyNumbers  } from '../../../../utils/validations';
 import CustomSelect from '../../../../components/ui/Select';
 // Componente para el formulario de creación y edición de usuarios
 const UserForm = ({
@@ -26,14 +26,30 @@ const UserForm = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = '';
-    // if (name === 'nombre') {
-    //   const ciError = validateName(value);
-    //   if (ciError) {
-    //     error = ciError;
-    //   } else {
-    //     error = '';
-    //   }
-    // }
+    if (name === 'nombre') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'primerApellido') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'segundoApellido') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
     setErrors({ ...errors, [name]: error });
     setFormData({ ...formData, [name]: value });
   };
@@ -113,9 +129,9 @@ const UserForm = ({
       </div>
       <div className='mt-2'>
         <Input
-          label="primerApellido"
+          label="Primer apellido"
           id="primerApellido"
-          placeholder="Ingresa primerApellido"
+          placeholder="Ingresa el apellido"
           value={formData.primerApellido}
           onChange={handleChange}
           icon={RiHome2Line}
@@ -124,9 +140,9 @@ const UserForm = ({
       </div>
       <div className='mt-2'>
         <Input
-          label="segundoApellido"
+          label="Segundo apellido"
           id="segundoApellido"
-          placeholder="Ingresa segundoApellido"
+          placeholder="Ingresa el segundo apellido"
           value={formData.segundoApellido}
           onChange={handleChange}
           icon={RiPhoneFindLine}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RiUser3Line } from 'react-icons/ri';
 
-const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: IconComponent, error, ...rest }) => {
+const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: IconComponent,disabled=false, error, ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => setIsFocused(true);
@@ -34,6 +34,7 @@ const Input = ({ label, id, type = 'text', placeholder, value, onChange, icon: I
           <div className={`h-full w-full border-r-2 ${borderColor}`}></div>
         </div>
         <input
+          disabled={disabled}
           type={type}
           name={id}
           id={id}

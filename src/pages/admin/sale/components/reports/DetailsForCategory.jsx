@@ -1,10 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
-import { useEffect } from 'react';
-// Configura las fuentes personalizadas si es necesario
-// Font.register({ family: 'Helvetica-Bold', src: 'https://path-to-your-font-file.ttf' });
 
-// Estilos para el PDF
 const styles = StyleSheet.create({
     page: {
         padding: 30,
@@ -64,11 +60,10 @@ const styles = StyleSheet.create({
     }
 });
 
-const DetailsSaleGeneral = ({ sales, start, end }) => {
+const DetailsForCategory = ({ sales }) => {
+    const [data, setData] = useState([]);
 
-    const totalImporte = useMemo(() => {
-        return sales.reduce((total, item) => total + (item.estado == 1 ? parseFloat(item.total) : 0), 0);
-    }, [sales]);
+
     return (
         <>
             <Document>
@@ -77,11 +72,11 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                     <View style={styles.header}>
                         {/* <Image style={styles.logo} src="/logo.png" /> */}
                         <View>
-                            <Text style={styles.title}>REPORTE GENERAL DE VENTAS</Text>
+                            <Text style={styles.title}>REPORTE VENTAS POR CATEGORIA</Text>
                         </View>
                         <View>
-                            <Text>FECHA INICIO: {start == '' ? 'Buscar en todo' : start}</Text>
-                            <Text>FECHA FIN: {end == '' ? 'Buscar en todo' : end}</Text>
+                            {/* <Text>FECHA INICIO: {start == ''? 'Buscar en todo':start}</Text>
+                            <Text>FECHA FIN: {end == ''? 'Buscar en todo':end}</Text> */}
                             {/* <Text>NOTA DE VENTA</Text>
                             <Text>No.: 00000</Text> */}
                         </View>
@@ -93,35 +88,35 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text>Sr Propietario.(a): Brandon </Text>
                         <Text>NIT.: 90274238734 </Text>
-                        {/* <Text>Fecha: {Date.now()} </Text> */}
+           
                     </View>
 
                     {/* Tabla */}
                     <View style={styles.table}>
                         <View style={styles.tableHeader}>
                             <Text style={[styles.tableCell, { flex: 0.5 }]}>N°</Text>
-                            <Text style={styles.tableCell}>Cliente</Text>
-                            <Text style={styles.tableCell}>Estado</Text>
-                            <Text style={styles.tableCell}>Fecha de venta</Text>
-                            <Text style={styles.tableCell}>Serie</Text>
-                            <Text style={styles.tableCell}>Total (Bs)</Text>
+
+                            <Text style={styles.tableCell}>Categoria</Text>
+                            {/* <Text style={styles.tableCell}>Fecha de venta</Text> */}
+                            <Text style={styles.tableCell}>Cantidad</Text>
+                            <Text style={styles.tableCell}>Ingresos totales (.Bs)</Text>
                         </View>
 
                         {sales.map((sale, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
-                                <Text style={styles.tableCell}>{sale.nombre_cliente}</Text>
-                                <Text style={styles.tableCell}>{sale.estado == 1 ? <Text style={styles.aprobado}>Aprobado</Text> : <Text style={styles.anulado}>Anulado</Text>}</Text>
-                                <Text style={styles.tableCell}>{sale.fechaCreacion}</Text>
-                                <Text style={styles.tableCell}>0000{sale.id}</Text>
-                                <Text style={styles.tableCell}>{sale.total}</Text>
+
+                                <Text style={styles.tableCell}>{sale.categoria} </Text>
+                                <Text style={styles.tableCell}>{sale.total_cantidad_vendida}</Text>
+                                <Text style={styles.tableCell}>{sale.total_ingresos}</Text>
+
                             </View>
                         ))}
 
                     </View>
 
                     {/* Total */}
-                    <Text style={styles.totalText}>Valor Total Bs: {totalImporte} </Text>
+                    {/* <Text style={styles.totalText}>Valor Total Bs: { } </Text> */}
 
                     {/* Footer */}
                     <View style={styles.footer}>
@@ -133,4 +128,4 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
     )
 }
 
-export default DetailsSaleGeneral;
+export default DetailsForCategory;

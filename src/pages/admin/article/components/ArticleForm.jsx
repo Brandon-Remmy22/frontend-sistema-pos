@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../../../components/ui/Input';
 import { RiPushpinLine, RiMailLine, RiUser3Fill, RiHome2Line, RiPhoneFindLine, RiIndeterminateCircleLine, RiUser2Line, RiFileTextLine, RiFontSize2, RiColorFilterLine, RiPriceTag3Line, RiStockLine, RiParagraph } from 'react-icons/ri';
-import { validateName } from '../../../../utils/validations';
+import { validateName, validateNameWithNumbers, validateOnlyNumbers } from '../../../../utils/validations';
 import CustomSelect from '../../../../components/ui/Select';
 import { getClientsFetch, selectClients } from '../../../../redux/Client/ClientSlice';
 import { getCategories } from '../../../../services/category/categoryService';
@@ -24,8 +24,8 @@ const ArticleForm = ({
 
 
   // const status = useSelector((state) => state.category.status);
-  const [errors, setErrors] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '' });
-  const [formData, setFormData] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '' });
+  const [errors, setErrors] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '', categoria: '' });
+  const [formData, setFormData] = useState({ nombre: '', descripcion: '', precio: '', talla: '', sexo: '', color: '', stock: '', codigo: '', img: '', categoria: '' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sexo, setSexo] = useState([
@@ -44,14 +44,39 @@ const ArticleForm = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     let error = '';
-    // if (name === 'nombre') {
-    //   const ciError = validateName(value);
-    //   if (ciError) {
-    //     error = ciError;
-    //   } else {
-    //     error = '';
-    //   }
-    // }
+    if (name === 'nombre') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'descripcion') {
+      const ciError = validateNameWithNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'color') {
+      const ciError = validateName(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+    if (name === 'talla') {
+      const ciError = validateOnlyNumbers(value);
+      if (ciError) {
+        error = ciError;
+      } else {
+        error = '';
+      }
+    }
+
     setErrors({ ...errors, [name]: error });
     setFormData({ ...formData, [name]: value });
   };
@@ -81,7 +106,7 @@ const ArticleForm = ({
     const hasErrors = Object.values(errors).some((error) => error !== '');
     if (!hasErrors) {
       const updatedFormData = { ...formData };
-      const { nombre, descripcion, precio, stock } = updatedFormData;
+      const { nombre, descripcion, precio, stock, talla, color, sexo, categoria } = updatedFormData;
       const isCreating = !isEditing; // Determinar si se está creando un nuevo usuario
 
       if (isCreating) {
@@ -95,12 +120,19 @@ const ArticleForm = ({
         if (!precio) {
           setErrors((prevErrors) => ({ ...prevErrors, precio: 'El precio es requerido.' }));
         }
+        if (!talla) {
+          setErrors((prevErrors) => ({ ...prevErrors, talla: 'La talla es requerida.' }));
+        }
+        if (!color) {
+          setErrors((prevErrors) => ({ ...prevErrors, color: 'El color es requerido.' }));
+        }
+
         if (!stock) {
           setErrors((prevErrors) => ({ ...prevErrors, stock: 'El carnet de indentidad es requerido.' }));
         }
       }
 
-      if ((nombre && descripcion && precio && stock)) {
+      if ((nombre && descripcion && precio && stock && talla && color )) {
         if (isCreating == true) {
 
 
@@ -158,10 +190,12 @@ const ArticleForm = ({
 
   const handleCategoryChange = (option) => {
     setSelectedCategory(option);
+
   };
 
   const handleSexohange = (option) => {
     setSelectedSexo(option);
+
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -191,6 +225,7 @@ const ArticleForm = ({
         <Input
           label="talla"
           id="talla"
+          type='number'
           placeholder="Ingresa talla"
           value={formData.talla}
           onChange={handleChange}
@@ -202,11 +237,13 @@ const ArticleForm = ({
         <CustomSelect
           label="Sexo"
           options={sexo}
+          id='sexo'
           value={selectedSexo}
           onChange={handleSexohange}
           placeholder="Selecciona una sexo"
           isSearchable={true}
           labelKey='label'
+          // error={errors.sexo}
         />
       </div>
       <div className='mt-2'>

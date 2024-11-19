@@ -45,6 +45,15 @@ const getSale = async (id) => {
     }
 }
 
+const getSalesForCategory = async () => {
+    try {
+        const response = await AxiosInstance.get(`/reporte/ventas-por-categoria`);
+        return response.data;
+    } catch (error) {
+
+    }
+}
+
 const createSale = async (formData) => {
     try {
         const response = await AxiosInstance.post('/venta', formData);
@@ -73,4 +82,4 @@ const deleteSale = async (id) => {
     }
 }
 
-export { getSales, getSalesForClient, getSale, createSale, updateSale, deleteSale, getReports, getProductsSalesBetter };
+export { getSales, getSalesForClient,getSalesForCategory, getSale, createSale, updateSale, deleteSale, getReports, getProductsSalesBetter };

@@ -14,7 +14,7 @@ import ModalForm from '../../../components/ui/ModalForm';
 
 
 import { getSalesFetch, selectSales, selectSalesReport, updateSalesFilter } from '../../../redux/Sale/SaleSlice';
-import { getProductsSalesBetter } from '../../../services/sale/saleService';
+import { getProductsSalesBetter, getSalesForCategory } from '../../../services/sale/saleService';
 import { AlertContext } from '../../../contexts/AlertContext';
 // import ClientTable from './components/table/ClientTable';
 import SaleTable from './components/table/SaleTable';
@@ -23,7 +23,13 @@ import { pdf } from '@react-pdf/renderer';
 import DetailsSaleGeneral from './components/reports/DetailsSaleGeneral';
 import DetailsSalesBetter from './components/reports/DetailsSalesBetter';
 import { useAuth } from '../../../hooks/useAuth';
-
+import DetailsClientsBetter from './components/reports/DetailsClientsBetter';
+import { selectEndDate, selectStartDate } from '../../../redux/Sale/SaleSlice';
+import { getArticlesFetch, selectArticles } from '../../../redux/Article/ArticleSlice';
+import { getArticles } from '../../../services/article/articleService';
+import DetailsIventory from './components/reports/DetailsInventory';
+import DetailsSalesNull from './components/reports/DetailsSalesNull';
+import DetailsForCategory from './components/reports/DetailsForCategory';
 const SaleIndex = () => {
 
     const dispatch = useDispatch();
@@ -33,15 +39,13 @@ const SaleIndex = () => {
     const { showAlert } = useContext(AlertContext);
     const { userRole } = useAuth();
 
-    const [allData, setAllData] = useState([]); // Almacenar todos los datos sin filtrar
-    const [filteredData, setFilteredData] = useState([]); // Almacenar datos filtrados
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-
+    const articles = useSelector(selectArticles);
     const sales = useSelector(selectSales);
     const filteredSales = useSelector(selectSalesReport);
     const status = useSelector((state) => state.sale.status);
 
+    const start = useSelector(selectStartDate);
+    const end = useSelector(selectEndDate);
 
     useEffect(() => {
         dispatch(getSalesFetch());
@@ -67,7 +71,7 @@ const SaleIndex = () => {
             const data = await getProductsSalesBetter();
             const top5Ventas = data.ventas
                 .sort((a, b) => parseFloat(b.cantidad) - parseFloat(a.cantidad)) // Ordenar de mayor a menor
-                .slice(0, 5); 
+                .slice(0, 5);
             const blob = await pdf(<DetailsSalesBetter sales={top5Ventas} />).toBlob();
             const url = URL.createObjectURL(blob);
 
@@ -79,12 +83,42 @@ const SaleIndex = () => {
     }
 
     const detailsSaleGeneral = async () => {
-        const blob = await pdf(<DetailsSaleGeneral sales={filteredSales} />).toBlob();
+        const blob = await pdf(<DetailsSaleGeneral sales={filteredSales} start={start} end={end} />).toBlob();
         const url = URL.createObjectURL(blob);
-
         // Abre el PDF en una nueva ventana o pestaña
         window.open(url);
     };
+
+    const detailsClientsBetter = async () => {
+
+        const blob = await pdf(<DetailsClientsBetter sales={filteredSales} start={start} end={end} />).toBlob();
+        const url = URL.createObjectURL(blob);
+        // Abre el PDF en una nueva ventana o pestaña
+        window.open(url);
+    };
+
+    const detailsInventory = async () => {
+        const data = await getArticles();
+        const blob = await pdf(<DetailsIventory sales={data.productos}/>).toBlob();
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+    };
+
+
+    
+    const detailsSalesNull = async () => {
+        const blob = await pdf(<DetailsSalesNull sales={filteredSales} start={start} end={end}/>).toBlob();
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+    };
+
+    const detailsSalesForCategory = async () => {
+        const data = await getSalesForCategory();
+        const blob = await pdf(<DetailsForCategory sales={data}/>).toBlob();
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+    };
+
     const detailsSalesBetter = async () => {
         getProductsSales();
     };
@@ -102,11 +136,23 @@ const SaleIndex = () => {
                     </div>
                     <div className='flex gap-3'>
                         {userRole === '1' && (<>
-                            <button onClick={detailsSaleGeneral} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
-                                <RiFilePdf2Line size={20} /> REPORTE GENERAL
+                            <button onClick={detailsSaleGeneral} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> REPORTE GENERAL
                             </button>
-                            <button onClick={detailsSalesBetter} className='flex className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-2 px-5'>
-                                <RiFilePdf2Line size={20} /> MÁS VENDIDOS
+                            <button onClick={detailsSalesBetter} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> MÁS VENDIDOS
+                            </button>
+                            <button onClick={detailsClientsBetter} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> MEJORES CLIENTES
+                            </button>
+                            <button onClick={detailsInventory} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> INVENTARIO
+                            </button>
+                            <button onClick={detailsSalesNull} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> VENTAS ANULADAS
+                            </button>
+                            <button onClick={detailsSalesForCategory} className='flex text-sm className="flex items-center gap-3 bg-green-800 text-white hover:bg-green-900 transition-colors rounded-xl py-1 px-2'>
+                                <RiFilePdf2Line size={15} /> VENTAS POR CATEGORIA
                             </button>
                         </>)}
 

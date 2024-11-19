@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useEffect } from 'react';
 // Configura las fuentes personalizadas si es necesario
@@ -64,11 +64,38 @@ const styles = StyleSheet.create({
     }
 });
 
-const DetailsSaleGeneral = ({ sales, start, end }) => {
+const DetailsClientsBetter = ({ sales, start, end }) => {
+    const [data, setData] = useState([]);
 
-    const totalImporte = useMemo(() => {
-        return sales.reduce((total, item) => total + (item.estado == 1 ? parseFloat(item.total) : 0), 0);
-    }, [sales]);
+    const ventasAprobadas = sales.filter(venta => venta.estado === "1");
+
+    // Agrupar por cliente y sumar totales
+    const clientesTotales = ventasAprobadas.reduce((acc, venta) => {
+        const { nombre_cliente, total, estado, fechaCreacion } = venta;
+
+        // Si el cliente ya está en el acumulador, suma el total
+        if (acc[nombre_cliente]) {
+            acc[nombre_cliente].total += parseFloat(total);
+        } else {
+            // Si no está, inicialízalo con el total actual y detalles
+            acc[nombre_cliente] = {
+                nombre_cliente,
+                total: parseFloat(total),
+                estado,
+                fechaCreacion,
+            };
+        }
+        return acc;
+    }, {});
+
+    const mejoresClientes = Object.values(clientesTotales).sort((a, b) => b.total - a.total);
+    useEffect(() => {
+        setData(mejoresClientes);
+    }, [])
+
+    // const totalImporte = useMemo(() => {
+    //     return sales.reduce((total, item) => total + (item.estado == 1 ? parseFloat(item.total) : 0), 0);
+    // }, [sales]);
     return (
         <>
             <Document>
@@ -77,11 +104,11 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                     <View style={styles.header}>
                         {/* <Image style={styles.logo} src="/logo.png" /> */}
                         <View>
-                            <Text style={styles.title}>REPORTE GENERAL DE VENTAS</Text>
+                            <Text style={styles.title}>REPORTE MEJORES CLIENTES</Text>
                         </View>
                         <View>
-                            <Text>FECHA INICIO: {start == '' ? 'Buscar en todo' : start}</Text>
-                            <Text>FECHA FIN: {end == '' ? 'Buscar en todo' : end}</Text>
+                            <Text>FECHA INICIO: {start == ''? 'Buscar en todo':start}</Text>
+                            <Text>FECHA FIN: {end == ''? 'Buscar en todo':end}</Text>
                             {/* <Text>NOTA DE VENTA</Text>
                             <Text>No.: 00000</Text> */}
                         </View>
@@ -102,18 +129,18 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                             <Text style={[styles.tableCell, { flex: 0.5 }]}>N°</Text>
                             <Text style={styles.tableCell}>Cliente</Text>
                             <Text style={styles.tableCell}>Estado</Text>
-                            <Text style={styles.tableCell}>Fecha de venta</Text>
-                            <Text style={styles.tableCell}>Serie</Text>
+                            {/* <Text style={styles.tableCell}>Fecha de venta</Text> */}
+                            {/* <Text style={styles.tableCell}>Serie</Text> */}
                             <Text style={styles.tableCell}>Total (Bs)</Text>
                         </View>
 
-                        {sales.map((sale, index) => (
+                        {data.map((sale, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
                                 <Text style={styles.tableCell}>{sale.nombre_cliente}</Text>
                                 <Text style={styles.tableCell}>{sale.estado == 1 ? <Text style={styles.aprobado}>Aprobado</Text> : <Text style={styles.anulado}>Anulado</Text>}</Text>
-                                <Text style={styles.tableCell}>{sale.fechaCreacion}</Text>
-                                <Text style={styles.tableCell}>0000{sale.id}</Text>
+                                {/* <Text style={styles.tableCell}>{sale.fechaCreacion}</Text> */}
+                                {/* <Text style={styles.tableCell}>0000{sale.id}</Text> */}
                                 <Text style={styles.tableCell}>{sale.total}</Text>
                             </View>
                         ))}
@@ -121,7 +148,7 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
                     </View>
 
                     {/* Total */}
-                    <Text style={styles.totalText}>Valor Total Bs: {totalImporte} </Text>
+                    {/* <Text style={styles.totalText}>Valor Total Bs: { } </Text> */}
 
                     {/* Footer */}
                     <View style={styles.footer}>
@@ -133,4 +160,4 @@ const DetailsSaleGeneral = ({ sales, start, end }) => {
     )
 }
 
-export default DetailsSaleGeneral;
+export default DetailsClientsBetter;
