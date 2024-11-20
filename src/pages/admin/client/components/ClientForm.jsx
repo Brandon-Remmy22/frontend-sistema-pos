@@ -35,22 +35,22 @@ const ClientForm = ({
         error = '';
       }
     }
-    if (name === 'direccion') {
-      const ciError = validateNameWithNumbers(value);
-      if (ciError) {
-        error = ciError;
-      } else {
-        error = '';
-      }
-    }
-    if (name === 'telefono') {
-      const ciError = validateOnlyNumbers(value);
-      if (ciError) {
-        error = ciError;
-      } else {
-        error = '';
-      }
-    }
+    // if (name === 'direccion') {
+    //   const ciError = validateNameWithNumbers(value);
+    //   if (ciError) {
+    //     error = ciError;
+    //   } else {
+    //     error = '';
+    //   }
+    // }
+    // if (name === 'telefono') {
+    //   const ciError = validateOnlyNumbers(value);
+    //   if (ciError) {
+    //     error = ciError;
+    //   } else {
+    //     error = '';
+    //   }
+    // }
     if (name === 'numDocumento') {
       const ciError = validateNameWithNumbers(value);
       if (ciError) {
@@ -82,12 +82,12 @@ const ClientForm = ({
         if (!nombre) {
           setErrors((prevErrors) => ({ ...prevErrors, nombre: 'El nombre es requerido.' }));
         }
-        if (!direccion) {
-          setErrors((prevErrors) => ({ ...prevErrors, direccion: 'La dirección es requerido.' }));
-        }
-        if (!telefono) {
-          setErrors((prevErrors) => ({ ...prevErrors, telefono: 'El número de telefono es requerido.' }));
-        }
+        // if (!direccion) {
+        //   setErrors((prevErrors) => ({ ...prevErrors, direccion: 'La dirección es requerido.' }));
+        // }
+        // if (!telefono) {
+        //   setErrors((prevErrors) => ({ ...prevErrors, telefono: 'El número de telefono es requerido.' }));
+        // }
         if (!numDocumento) {
           setErrors((prevErrors) => ({ ...prevErrors, numDocumento: 'El carnet de indentidad es requerido.' }));
         }
